@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+
+
 import { Heading } from "@/components/ui/heading";
 import { CourseContextProvider } from "./create-course.context";
 import {
