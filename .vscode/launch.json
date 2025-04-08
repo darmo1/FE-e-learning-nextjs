@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Next.js (dev)",
+        "type": "node",
+        "request": "launch",
+        // Ejecuta Next.js usando npm, pnpm o yarn
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        // O si usas yarn: "runtimeExecutable": "yarn", "runtimeArgs": ["dev"],
+        // Si usas pnpm: "runtimeExecutable": "pnpm", "runtimeArgs": ["dev"],
+        
+        // Puerto para el debugger
+        // (No todos los proyectos lo requieren, pero si Next.js
+        // escucha en modo inspect, debe ser algo como 9229, 9230, etc.)
+        "port": 9229,
+        
+        // Puedes excluir archivos de Node.js interno
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        // Ver los mensajes en la terminal integrada
+        "console": "integratedTerminal"
+      }
+    ]
+  }
+  
