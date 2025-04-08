@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+
+
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { VideoList } from "@/components/video/video-list";
 import { VideoUploader } from "@/components/video/video-uploader";
