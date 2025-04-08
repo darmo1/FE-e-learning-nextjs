@@ -16,7 +16,7 @@ export const StepperLessons = ({
       {/* {/* Vertical line connecting steps */}
       <div className="absolute left-3 top-8 bottom-8 w-0.5 bg-muted" />
 
-      {lessons.map(({ course_id, id:lessonId, is_free, title, video_url }) => (
+      {lessons.map(({ course_id, id:lessonId,  title, }) => (
         <div
           key={uuid()}
           className="relative flex items-center py-3 cursor-pointer"
