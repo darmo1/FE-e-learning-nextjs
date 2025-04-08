@@ -43,7 +43,7 @@ export const StepperLessons = ({
           <div
             className={cn(
               "ml-4 font-medium",
-              10 === 1 ? "text-foreground" : "text-muted-foreground  bg-blue-100"
+              false ? "text-foreground" : "text-muted-foreground  bg-blue-100"
             )}
           >
             {title}
