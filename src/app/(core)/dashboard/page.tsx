@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Heading } from "@/components/ui/heading";
 import { CourseWrapper } from "./_components/courses/course-wrapper";
 
