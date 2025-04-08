@@ -19,7 +19,7 @@ export const CreateLessonFormWrapper: FC<PropsWithChildren> = ({
     },
   });
   const { setError } = formMethods
-  const [state, dispatchAction, pending] = useActionState(
+  const [state, dispatchAction] = useActionState(
     createLessonAction,
     null
   );

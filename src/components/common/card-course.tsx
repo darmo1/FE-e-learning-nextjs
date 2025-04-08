@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { v4 as uuid } from "uuid";
 import { Conditional } from "./conditional";
-import { Button } from "../ui/button";
 
 export type CourseCardProps = {
   id?: string | number;
@@ -17,7 +16,6 @@ export type CourseCardProps = {
 };
 
 export const CardCourse = ({
-  id: courseId,
   category,
   description,
   image_url,

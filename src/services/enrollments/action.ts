@@ -11,7 +11,7 @@ export const EnrollCourseAction = async (courseId: number) => {
 
 
   try {
-    const { data, response } = await requestHandler({
+    const { response } = await requestHandler({
       url: ENDPOINT.ENROLL_COURSE,
       method: "POST",
       headers,

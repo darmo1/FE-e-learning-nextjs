@@ -30,7 +30,7 @@ export function ColorfulConfetti({ duration = 6000, count = 150 }: CuteConfettiP
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>(0)
-  const explosionRef = useRef<boolean>(true)
+  // const explosionRef = useRef<boolean>(true)
 
   useEffect(() => {
     const canvas = canvasRef.current

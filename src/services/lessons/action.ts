@@ -40,9 +40,9 @@ export const createLessonAction = async (
 };
 
 const createDataLesson = async (_data, video) => {
-  const headers = await AuthorizationHeaders() || {};
+  const headers = (await AuthorizationHeaders()) || {};
   try {
-    const { response, data } = await requestHandler({
+    await requestHandler({
       url: ENDPOINT.CREATE_LESSON,
       method: "POST",
       headers,
@@ -60,7 +60,7 @@ const createDataLesson = async (_data, video) => {
       errors: "",
     };
   } catch (error) {
-
+    console.log({ error });
     return {
       success: false,
       message: "_error from save lesson",
@@ -70,7 +70,7 @@ const createDataLesson = async (_data, video) => {
 };
 
 export const getLessonsByCourse = async (courseId: string) => {
-  const headers = await AuthorizationHeaders();
+  const headers = (await AuthorizationHeaders()) || {};
   const url = `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}`;
   const response = await fetch(url, {
     headers,

@@ -21,7 +21,7 @@ export const UserProvider: FC<PropsWithChildren<{ role: string }>> = ({
     () => ({
       role,
     }),
-    []
+    [role]
   );
   return <UserContext.Provider value={props}>{children}</UserContext.Provider>;
 };

@@ -1,6 +1,5 @@
 "use client";
 import { userLogin } from "@/services/users/actions";
-import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { defaultValuesLoginForm } from "./constants";
@@ -10,7 +9,7 @@ type AuthFormProps = {
   password: string;
 };
 export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
-  const router = useRouter();
+
   const formMethods = useForm<AuthFormProps>({
     defaultValues: defaultValuesLoginForm,
   });

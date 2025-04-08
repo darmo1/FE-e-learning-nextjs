@@ -1,6 +1,5 @@
 "use client";
 
-import { checkoutAction } from "@/services/checkout/action";
 import { userRegisterAction } from "@/services/users/actions";
 import {
   AuthRegisterProps,

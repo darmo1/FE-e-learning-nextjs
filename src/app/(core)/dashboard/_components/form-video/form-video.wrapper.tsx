@@ -7,7 +7,7 @@ import { getSignature } from "../../../../../../utils/cloudinary";
 type FormValuesProps = {
   "upload-videos": FileList;
 };
-const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
+
 export const FormVideoWrapper: FC<PropsWithChildren> = ({ children }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const formMethod = useForm<FormValuesProps>();

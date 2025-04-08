@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { BookOpen, Clock, Users } from "lucide-react";
 import Image from "next/image";
-import { Course, EnrollmentsCourses } from "./types";
+import { EnrollmentsCourses } from "./types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -17,15 +17,12 @@ export function CourseCard({
   course,
   course_id: courseId,
   enrollment_created_at,
-  enrollment_updated_at,
-  user_id,
 }: EnrollmentsCourses) {
   const {
     category,
     description,
     image_url,
     title,
-    duration,
     isFeatured,
     lessons,
     students,
@@ -61,7 +58,11 @@ export function CourseCard({
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center">
             <Clock className="mr-1 h-3 w-3" />
-            <span>{enrollment_created_at ? (new Date(enrollment_created_at).toLocaleDateString()): ''}</span>
+            <span>
+              {enrollment_created_at
+                ? new Date(enrollment_created_at).toLocaleDateString()
+                : ""}
+            </span>
           </div>
           <div className="flex items-center">
             <Users className="mr-1 h-3 w-3" />

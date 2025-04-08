@@ -28,7 +28,7 @@ export const CardLesson = ({ lessons }: { lessons: LessonsProps[] }) => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            {lessons.map(({ course_id, id, is_free, title, video_url }) => (
+            {lessons.map(({  id,  title, video_url }) => (
               <div
                 key={id}
                 className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-[200px_1fr]"
