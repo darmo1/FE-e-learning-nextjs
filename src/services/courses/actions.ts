@@ -16,7 +16,7 @@ type responseType = {
 export const createCourseAction = async (
   formData: CreateCourseProps
 ): Promise<responseType> => {
-  const { image, ...body } = formData;
+  const { image } = formData;
   const _formData = new FormData();
   _formData.append("image", image);
   try {
@@ -31,7 +31,8 @@ export const createCourseAction = async (
 
     const responseImage = await res.json();
     const imageUrl = responseImage?.secure_url || ""
-    return await createCourse(body, imageUrl);
+
+    return await createCourse(formData, imageUrl);
   } catch (err) {
     return {
       success: false,
@@ -80,7 +81,7 @@ export const getCoursesByUser = async () => {
 };
 
 export const getDemoCourse = async (courseId: string) => {
-  const headers = await AuthorizationHeaders();
+  const headers = await AuthorizationHeaders() || {};
 
   const response = await fetch(`${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}/demo`, {
     headers,

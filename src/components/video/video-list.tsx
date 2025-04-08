@@ -63,7 +63,7 @@ export function VideoList() {
                     <div>
                       <h3 className="font-semibold">{video.title}</h3>
                       <p className="text-sm text-muted-foreground">
-                        Subido el {video?.date}
+                        Subido el {video?.date.toString()}
                       </p>
                     </div>
                     <DropdownMenu>

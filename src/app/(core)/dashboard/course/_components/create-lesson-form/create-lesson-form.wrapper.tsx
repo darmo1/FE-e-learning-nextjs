@@ -27,7 +27,8 @@ export const CreateLessonFormWrapper: FC<PropsWithChildren> = ({
   useEffect(() => {
     if(!state) return
     if(!isEmpty(state?.errors)){
-      Object.entries(state.errors).forEach(([field, error]) => {
+      const errors = state.errors as Record<string, string[]>;
+      Object.entries(errors).forEach(([field, error]) => {
         setError(field as "title" | "description" | "upload-video", {
           type: "manual",
           message: error[0], // Asegúrate de que `error` tiene una propiedad `message`

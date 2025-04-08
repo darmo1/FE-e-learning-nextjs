@@ -4,6 +4,7 @@ import { requestHandler } from "../../../utils/request-handler";
 import { ResponseFetchUser, UserLoginProps } from "./types";
 import { setCookies } from "../../../utils/cookies";
 import { AuthorizationHeaders } from "../../../utils/headers";
+import { userRegisterSchema } from "./schemas";
 
 export const userLogin = async (data: UserLoginProps) => {
   const url = ENDPOINT.LOGIN;

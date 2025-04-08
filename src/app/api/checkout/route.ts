@@ -2,7 +2,11 @@ import { ENDPOINT } from "@/constants/endpoints";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_KEY || "");
+if (!process.env.STRIPE_KEY) {
+  throw new Error("STRIPE_KEY no está definida en las variables de entorno.");
+}
+
+const stripe = new Stripe(process.env.STRIPE_KEY);
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
