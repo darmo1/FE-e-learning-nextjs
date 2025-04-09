@@ -7,8 +7,8 @@ export default function RootLayoutAuth({
 }) {
   return (
     <>
-      <div className="flex">
-        <div className="order-2 md:order-1   relative w-full md:w-1/2">
+      <div className="flex-col md:flex">
+        <div className="order-2 md:order-1 relative w-full md:w-1/2">
           <Image
             src="/placeholder.svg?height=1080&width=1080"
             alt="Beautiful landscape"
