@@ -5,6 +5,8 @@ import { getCookie } from "../../../../utils/cookies";
 import { redirect } from "next/navigation";
 import { getCoursesEnrolled } from "@/services/enrollments/action";
 import { Container } from "@/components/common/containter";
+import { Conditional } from "@/components/common/conditional";
+import { EmptyCoursesCard } from "@/components/common/empty-courses-card";
 
 export default async function Home() {
   const token = await getCookie("access_token");
@@ -15,28 +17,41 @@ export default async function Home() {
   }
 
   const { data: courses } = await getCoursesEnrolled();
+  const showCarouselCourses = Boolean((courses || []).length);
 
   return (
     <>
-    <Container className="py-16">
-      <Heading
-        title="Bienvenido a la app"
-        description="Esta es la pagina de inicio"
-      />
-      <div>
-        <CoursesCarousel
-          title="My Courses"
-          description="Expand your skills with our comprehensive selection of courses"
-          courses={courses}
-        />
-        {/**Add another course */}
+      <Container className="py-16">
         <Heading
-          title="Otros cursos que te pueden interesar"
-          description="Otros cursos"
+          title="Bienvenido a la app"
+          description="Esta es la pagina de inicio"
+          className="py-4"
         />
+        <div>
+          <Conditional
+            test={showCarouselCourses}
+            fallback={
+              <EmptyCoursesCard
+                title="No tienes cursos"
+                description="Puedes explorar la sección de cursos disponibles. Empieza ahora 👨‍💻"
+              />
+            }
+          >
+            <CoursesCarousel
+              title="My Courses"
+              description="Expand your skills with our comprehensive selection of courses"
+              courses={courses}
+            />
+          </Conditional>
 
-        <PollCoursesWrapper />
-      </div>
+          <hr className="border border-gray-200 my-8" />
+          <Heading
+            title="Cursos que te pueden interesar"
+            description="Otros cursos"
+          />
+
+          <PollCoursesWrapper />
+        </div>
       </Container>
     </>
   );
