@@ -3,16 +3,12 @@ import { TopToolBar } from "../../_components/tool-bar";
 import { CourseProvider } from "../course-context";
 import { getLessonsByCourse } from "@/services/lessons/action";
 import { BottomToolBar } from "../../_components/tool-bar/bottom-tool-bar";
+import { LessonsProps } from "../types";
 
-export type LessonsProps = {
-  video_url: string;
-  course_id: number;
-  id: number;
-  title: string;
-  is_free: boolean;
-};
 
-export default async function LayoutCouseId({
+
+
+export default async function LayoutCourseId({
   children,
   params,
 }: {
@@ -22,6 +18,7 @@ export default async function LayoutCouseId({
   const { id: courseId } = await params;
   const courses = await getCoursesByUser();
   const lessons: LessonsProps[] = await getLessonsByCourse(courseId);
+
   return (
     <CourseProvider courses={courses} lessons={lessons}>
       <TopToolBar />

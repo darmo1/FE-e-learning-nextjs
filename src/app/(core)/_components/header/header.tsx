@@ -28,18 +28,18 @@ export const Header = async () => {
   return (
     <div className="bg-black py-3">
       <Container className="text-white bg-black/50">
-        <header className="flex justify-between items-center">
+        <header className="flex justify-between items-center px-4">
           <Link href={isLogged ? "/home" : "/"} >
             <div className="flex justify-center items-center cursor-pointer">
               <Play />
-              <span className="text-lg font-medium mx-2">Learn Streamer</span>
+              <span className="text-md font-medium mx-2">Learn Streamer</span>
             </div>
           </Link>
           <nav>
             <ul className="flex space-x-4">
               {menu.map(({ href, name }) => (
-                <Link href={href} key={uuid()}>
-                  <li>{name}</li>
+                <Link href={href} key={uuid()} className="text-sm md:text-lg">
+                 {name}
                 </Link>
               ))}
 

@@ -8,14 +8,15 @@ export const createCourseSchema = z.object({
   category: z.string().nonempty("Campo requerido"),
   price: z.number().nonnegative(),
   image: z
-    .instanceof(File, { message: "Debe seleccionar una imagen válida" }) // ✅ Verifica que sea un File
-    .refine((file) => VALID_IMAGE_TYPES.includes(file.type), {
-      message: "El archivo debe ser una imagen (JPEG, PNG, JPG)",
-    })
-    .refine((file) => {
-      return file.size <= MAX_FILE_SIZE}, {
-      message: `El archivo es demasiado grande. El tamaño máximo es ${MAX_FILE_SIZE / 1000}KB`,
-    }),
+  .instanceof(File)
+  .optional()
+  .refine((file) => !file || VALID_IMAGE_TYPES.includes(file.type), {
+    message: "El archivo debe ser una imagen (JPEG, PNG, JPG)",
+  })
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+    message: `El archivo es demasiado grande. El tamaño máximo es ${MAX_FILE_SIZE / 1000}KB`,
+  }),
+  previewMode: z.string().optional()
 });
 
 export type CreateCourseProps = z.infer<typeof createCourseSchema>;

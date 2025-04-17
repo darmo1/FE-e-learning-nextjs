@@ -51,7 +51,7 @@ export const getCoursesEnrolled = async () => {
     return {
       success: true,
       data,
-      message: "Courses enrolled successfully",
+      message: "Get courses enrolled successfully",
       error: null,
     };
   } catch (error) {

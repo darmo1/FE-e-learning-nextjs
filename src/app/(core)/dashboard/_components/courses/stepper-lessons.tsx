@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import React from "react";
-import { LessonsProps } from "../../course/[id]/page";
+
 import { v4 as uuid } from "uuid";
 import { Conditional } from "@/components/common/conditional";
 import Link from "next/link";
+import { LessonsProps } from "../../course/types";
 
 export const StepperLessons = ({
   lessons = [],

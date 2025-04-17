@@ -7,6 +7,7 @@ import { Container } from "@/components/common/containter";
 import { BodyWrapper } from "@/components/common/body-wrapper";
 import { Toaster } from "sonner";
 import { Suspense } from "react";
+import QueryProvider from "@/providers/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({
       <BodyWrapper
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <>
+        <QueryProvider>
           <Suspense fallback={<div>Cargando...</div>}>
             <Header />
           </Suspense>
@@ -41,7 +42,7 @@ export default function RootLayout({
           <Container className="grow">{children}</Container>
           <Footer />
           <Toaster />
-        </>
+        </QueryProvider>
       </BodyWrapper>
     </html>
   );

@@ -3,14 +3,16 @@ import { demoCourseProps } from "../../[coursename]/[courseId]/page";
 import { Video as VideoIcon } from "lucide-react";
 import { CardVideoCourse } from "@/components/common/card-video";
 import { fromHyphenatedToString } from "../../../../../../utils/string";
+import { fetchUser } from "@/services/users/actions";
 
-export const ContentCourse = ({
+export const ContentCourse = async ({
   contentCourse,
   coursename,
 }: {
   contentCourse: demoCourseProps;
   coursename: string;
 }) => {
+  const { data: { role } } = await fetchUser()
   const { content, demo } = contentCourse;
   const courseData = demo.map((course) => ({
     ...course,
@@ -40,7 +42,7 @@ export const ContentCourse = ({
         </div>
       </div>
       <div className="md- col-span-2">
-        <CardVideoCourse {...courseData} />
+        <CardVideoCourse {...courseData} role={role}/>
       </div>
       <div></div>
     </>

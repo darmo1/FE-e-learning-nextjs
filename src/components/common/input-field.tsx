@@ -22,7 +22,7 @@ export const InputField = ({
   ...rest
 }: InputFieldProps) => {
   return (
-    <div className="my-4 flex flex-col">
+    <div className="my-4 flex flex-col ">
       <label className="font-semibold text-sm">
         {label} {required ? <span className="text-red-500"> * </span> : null}{" "}
       </label>
@@ -31,7 +31,7 @@ export const InputField = ({
         type={type}
         id={id || name}
         name={name}
-        className={`${className} ${type === 'file' ? '' : 'border' } inline-block min-w-44 px-4 py-2 rounded-sm mt-1 
+        className={`${className} ${type === 'file' ? '' : 'border border-gray-300' } inline-block min-w-44 px-4 py-2 rounded-sm mt-1 
           ${errorMessage ? "text-red-500 border-red-500" : null}
           `}
         {...rest}

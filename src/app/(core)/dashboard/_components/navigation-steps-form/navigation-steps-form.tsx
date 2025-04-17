@@ -1,7 +1,7 @@
 "use client";
 
 
-import { useCreateCourse } from "../../create-course/create-course.context";
+import { useCreateCourse } from "../../@instructor/course/create-course/create-course.context";
 
 export const NavigationStepsForm = () => {
     const { currentStep , setCurrentStep } = useCreateCourse();

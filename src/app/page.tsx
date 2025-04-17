@@ -27,7 +27,7 @@ export default async function Page() {
   }
 
   return (
-    <main className=" md:max-w-3xl mx-auto">
+    <main className="  mx-auto">
       <SectionHero />
       <SectionFeatures />
       <SectionPricing />

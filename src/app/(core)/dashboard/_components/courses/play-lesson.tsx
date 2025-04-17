@@ -21,21 +21,23 @@ export const PlayLesson = () => {
   }, [currentLessonId, lessons]);
 
   if (!selectedLesson) return <p>No hay lecciones disponibles.</p>;
+  
 
   return (
     <div>
-      <Heading title={selectedLesson.title} description="......." />
-      <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
-        <video
-          controls
-        
-          className="h-full w-full object-cover"
-          key={selectedLesson.id}
-        >
-          <source src={selectedLesson.video_url} type="video/mp4" />
-          Tu navegador no soporta la reproducción de video.
-        </video>
+      <div>
+        <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
+          <video
+            controls
+            className="h-full w-full object-cover"
+            key={selectedLesson.id}
+          >
+            <source src={selectedLesson.video_url} type="video/mp4" />
+            Tu navegador no soporta la reproducción de video.
+          </video>
+        </div>
       </div>
+      <Heading title={selectedLesson.title} description="" />
     </div>
   );
 };

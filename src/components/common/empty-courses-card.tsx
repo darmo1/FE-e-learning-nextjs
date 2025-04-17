@@ -9,7 +9,7 @@ export function EmptyCoursesCard({
   description: string;
 }) {
   return (
-    <Card className="w-full max-w-md my-4">
+    <Card className="w-full max-w-md my-4 border-gray-200">
       <CardContent className="flex flex-col items-center justify-center p-6 text-center space-y-4">
         <div className="bg-slate-100 p-3 rounded-full">
           <BookOpen className="h-8 w-8 text-slate-600" />
