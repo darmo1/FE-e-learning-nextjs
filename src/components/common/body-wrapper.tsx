@@ -16,7 +16,7 @@ export function BodyWrapper({
     : "bg-white";
 
   return (
-    <body className={`${className} relative flex flex-col  ${backgroundColor}`}>
+    <body className={`${className} relative flex flex-col min-h-screen ${backgroundColor}`}>
       {children}
     </body>
   );

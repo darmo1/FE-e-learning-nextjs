@@ -4,8 +4,12 @@ const HOST = process.env.HOST_BACKEND || "http://localhost:3005";
 export const ENDPOINT = {
   LOGIN: `${HOST}${prefix}/auth/login`,
   GET_COURSES_BY_USER: `${HOST}${prefix}/course`,
+  GET_COURSE_BY_COURSE_ID: `${HOST}${prefix}/course/{0}`,
+  GET_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/course/instructor`,
   CREATE_COURSE: `${HOST}${prefix}/course/create`,
+  EDIT_COURSE: `${HOST}${prefix}/course/update/{0}`,
   CREATE_LESSON: `${HOST}${prefix}/lessons/create`,
+  UPDATE_LESSON: `${HOST}${prefix}/lessons/edit/{0}`,
   GET_LESSONS_BY_COURSE: `${HOST}${prefix}/lessons`,
   REGISTER: `${HOST}${prefix}/auth/register`,
   ENROLL_COURSE: `${HOST}${prefix}/enrollments`,

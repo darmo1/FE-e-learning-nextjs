@@ -17,7 +17,7 @@ export const CreateLessonForm = () => {
         {...register("title")}
         placeholder="Enter your description"
         errorMessage={
-          errors?.description?.message
+          errors?.title?.message
             ? String(errors?.description?.message)
             : ""
         }

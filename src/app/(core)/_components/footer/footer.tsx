@@ -5,32 +5,32 @@ export const Footer = () => {
   return (
     <div className="bg-black">
       <Container className="text-white mb-0 m-auto w-full">
-        <footer className="">
+        <footer className="px-4">
           <div className="flex justify-between items-center py-4 border-b border-gray-700">
-            <ul className="flex gap-4">
+            <ul className="md:flex gap-4">
               <Link href="/">
-                <li>Inicio</li>
+                Inicio
               </Link>
               <Link href="/">
-                <li>Términos y condiciones</li>
+               Términos y condiciones
               </Link>
               <Link href="/">
-                <li>FAQ</li>
+                FAQ
               </Link>
               <Link href="/">
-                <li>Contáctenos</li>
+               Contáctenos
               </Link>
               <Link href="/">
-                <li>Instructor</li>
+                Instructor
               </Link>
             </ul>
-            <div className="flex gap-4 ">
+            <div className="md:flex gap-4 ">
               <div>X</div>
               <div>Youtube</div>
             </div>
           </div>
           <div>
-            <p className="text-center text-sm text-gray-400 py-4">
+            <p className="text-center text-sm text-gray-400 py-4 text-balance">
               Todos los derechos reservados. Hecho con ❤️ para el mundo
             </p>
           </div>

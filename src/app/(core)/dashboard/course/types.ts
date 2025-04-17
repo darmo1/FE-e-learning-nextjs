@@ -11,14 +11,19 @@ export type CourseProviderProps = {
 };
 
 export type LessonsProps = {
-  video_url: string,
-  course_id: number,
-  id: number,
   title: string
   is_free: boolean
+  id?: number,
+  course_id: number,
+  video_url?: string,
+  description?: string
+  created_at: Date
+  updated_at: Date
 }
 
 export type CourseContextProps = {
   courses: CoursesProps[];
   lessons: LessonsProps[]
 };
+
+

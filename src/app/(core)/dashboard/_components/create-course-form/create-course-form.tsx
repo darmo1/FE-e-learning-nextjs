@@ -9,14 +9,17 @@ import Image from "next/image";
 import { Upload } from "lucide-react";
 
 export const CreateCourseForm = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const {
     register,
     formState: { errors },
     setValue,
     trigger,
-    clearErrors
+    clearErrors,
+    watch,
   } = useFormContext();
+
+  const inputImage = watch("previewMode");
+  const [selectedImage, setSelectedImage] = useState<string | null>(inputImage || "");
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -34,7 +37,7 @@ export const CreateCourseForm = () => {
   const removeImage = () => {
     setSelectedImage(null);
     setValue("image", null);
-    clearErrors('image')
+    clearErrors("image");
   };
 
   return (
@@ -106,32 +109,27 @@ export const CreateCourseForm = () => {
         </Conditional>
 
         <div className="gap-2">
-        <Conditional test={!selectedImage}>
-        <label>Image</label>
-        <div  className="flex justify-center items-center">
-        <Upload className="w-5 h-5 " />
-       
-          <input
-            {...register("image", {
-              onChange: handleImageChange,
-            })}
-            className="ml-4 cursor-pointer file:rounded file:border file:px-4 file:py-2 file:bg-blue-500 file:text-white"
-            type="file"
-            placeholder="Upload image"
-            accept="image/*"
-            required
-          />
-        </div>
-        </Conditional>
-        
+          <Conditional test={!selectedImage}>
+            <label>Image</label>
+            <div className="flex justify-center items-center">
+              <Upload className="w-5 h-5 " />
 
-        
-
+              <input
+                {...register("image", {
+                  onChange: handleImageChange,
+                })}
+                className="ml-4 cursor-pointer file:rounded file:border file:px-4 file:py-2 file:bg-blue-500 file:text-white"
+                type="file"
+                placeholder="Upload image"
+                accept="image/*"
+                required
+              />
+            </div>
+          </Conditional>
         </div>
         <div className="font-semibold text-red-500">
           {errors?.image?.message ? String(errors?.image?.message) : ""}
         </div>
-       
       </div>
     </div>
   );

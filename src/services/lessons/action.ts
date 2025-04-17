@@ -3,32 +3,27 @@ import { apiEndpoints } from "@/constants/endpoints.api";
 import { requestHandler } from "../../../utils/request-handler";
 import { AuthorizationHeaders } from "../../../utils/headers";
 import { ENDPOINT } from "@/constants/endpoints";
-import { createLessonSchema } from "./schemas";
+import { CreateLessonSchema, EditLessonSchema } from "./schemas";
+import { replaceTokenUrl } from "../../../utils/string";
+import { revalidatePath } from "next/cache";
 
 export const createLessonAction = async (
-  prevState: unknown,
-  formData: FormData
+  formData: CreateLessonSchema,
+  queryCourseId: number
 ) => {
-  const body = Object.fromEntries(formData);
-  const result = createLessonSchema.safeParse(body);
-
-  if (!result.success) {
-    return {
-      errors: result.error.flatten().fieldErrors,
-      success: false,
-    };
-  }
-
+  
+  const { ["upload-video"]: uploadVideo, ...body } = formData;
+  const formVideo = new FormData();
+  formVideo.set("upload-video", uploadVideo);
   try {
-    // const file = formData.get("upload-video");
     const res = await fetch(apiEndpoints.UPLOAD_VIDEO, {
       method: "POST",
-      body: formData,
+      body: formVideo,
     });
 
     if (res.ok) {
       const responseVideo = await res.json();
-      return createDataLesson(body, responseVideo);
+      return createDataLesson(body, responseVideo, queryCourseId);
     }
   } catch (err) {
     return {
@@ -39,7 +34,7 @@ export const createLessonAction = async (
   }
 };
 
-const createDataLesson = async (_data, video) => {
+export const createDataLesson = async (_data, queryCourseId: number, video) => {
   const headers = (await AuthorizationHeaders()) || {};
   try {
     await requestHandler({
@@ -48,11 +43,14 @@ const createDataLesson = async (_data, video) => {
       headers,
       body: {
         title: _data.title,
+        description: _data.description,
         video_url: video?.secure_url || "",
         is_free: false,
-        course_id: 3,
+        course_id: queryCourseId,
       },
     });
+
+    revalidatePath('/(core)/dashboard', 'layout')
 
     return {
       success: true,
@@ -79,4 +77,64 @@ export const getLessonsByCourse = async (courseId: string) => {
   const lessons = await response.json();
 
   return lessons;
+};
+
+export const editLessonAction = async (
+  formData: Partial<EditLessonSchema>,
+  lessonId: number
+) => {
+  const { ["upload-video"]: uploadVideo, ...body } = formData;
+  if (uploadVideo) {
+    const formVideo = new FormData();
+    formVideo.set("upload-video", uploadVideo);
+    try {
+      const res = await fetch(apiEndpoints.UPLOAD_VIDEO, {
+        method: "POST",
+        body: formVideo,
+      });
+
+      if (res.ok) {
+        const responseVideo = await res.json();
+        return editLessonById(body, lessonId, responseVideo);
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: "_error from upload video",
+        errors: err,
+      };
+    }
+  } else {
+    return editLessonById(body, lessonId, undefined);
+  }
+};
+
+export const editLessonById = async (_data, lessonId: number, video) => {
+  const headers = (await AuthorizationHeaders()) || {};
+  try {
+      await requestHandler({
+      url: replaceTokenUrl(ENDPOINT.UPDATE_LESSON, lessonId),
+      method: "PATCH",
+      headers,
+      body: {
+        ...(_data.title && { title: _data.title }),
+        ...(_data?.description && { description: _data.description }),
+        ...(video?.secure_url && { video_url: video.secure_url }),
+      },
+    });
+
+
+    return {
+      success: true,
+      message: "_success All process",
+      errors: "",
+    };
+  } catch (error) {
+    console.log({ error });
+    return {
+      success: false,
+      message: "_error from save lesson",
+      errors: "",
+    };
+  }
 };

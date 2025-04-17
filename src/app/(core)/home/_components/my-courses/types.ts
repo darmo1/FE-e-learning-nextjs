@@ -9,6 +9,7 @@ export interface Course {
   students?: number;
   lessons?: number;
   isFeatured?: boolean;
+  price?: number
 }
 
 export type EnrollmentsCourses = {

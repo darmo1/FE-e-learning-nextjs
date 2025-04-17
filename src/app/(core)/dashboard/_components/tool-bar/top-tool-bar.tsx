@@ -15,9 +15,15 @@ import { Conditional } from "@/components/common/conditional";
 import { StepperLessons } from "../courses/stepper-lessons";
 
 import { useCourses } from "../../course/course-context";
+import { Heading } from "@/components/ui/heading";
+import { useSearchParams } from "next/navigation";
 
 export const TopToolBar = () => {
-  const { lessons } = useCourses();
+  const searchParams = useSearchParams();
+  const { lessons = [] } = useCourses();
+  const currentLessonId = Number(searchParams.get("lesson")) || 0;
+
+  const currentLesson = lessons.find(({ id }) => id === Number(currentLessonId)) || lessons[0]
 
   return (
     <Conditional
@@ -26,7 +32,8 @@ export const TopToolBar = () => {
     >
       <Sheet>
         <SheetTrigger asChild>
-          <div className="flex justify-end">
+          <div className="flex justify-between mb-4">
+            <Heading title={currentLesson?.title} description="" />
             <Button variant="outline" >
               <div className="w-full">Ver clases</div>
               <Menu className="h-5 w-10" />

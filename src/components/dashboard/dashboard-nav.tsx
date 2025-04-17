@@ -1,14 +1,16 @@
 "use client";
-import Link from "next/link";
+
 import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
 import { Conditional } from "../common/conditional";
 import { useUser } from "@/app/(core)/dashboard/user-context";
+import { LayoutDashboardIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 type NavItems = {
   title: string;
   href: string;
-  icon?: string;
+  icon?: React.ElementType;
 }[];
 
 export function DashboardNav() {
@@ -18,7 +20,7 @@ export function DashboardNav() {
     {
       title: "Dashboard",
       href: "/dashboard",
-      icon: "",
+      icon: LayoutDashboardIcon,
     },
 
     ...(role === "instructor"
@@ -26,7 +28,7 @@ export function DashboardNav() {
           {
             title: "Crear curso",
             href: "/dashboard/course/create-course",
-            icon: "",
+            icon: PlusIcon,
           },
         ]
       : []),
@@ -37,16 +39,20 @@ export function DashboardNav() {
         <div className="flex h-14 items-center border-b px-4"></div>
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm">
-            {navItems.map(({ title, href }, index) => (
+            {navItems.map(({ title, href, icon: Icon }, index) => (
               <Button
                 key={uuidv4()}
                 variant={index ? "ghost" : "secondary"}
                 asChild
+                onClick={() => {
+                  window.location.href = href;
+                }}
               >
-                <Link href={href}>
-                  <span>icono</span>
+                <div className="flex">
+                  {Icon && <Icon className="w-4 h-4" />}
+
                   <span>{title}</span>
-                </Link>
+                </div>
               </Button>
             ))}
           </nav>

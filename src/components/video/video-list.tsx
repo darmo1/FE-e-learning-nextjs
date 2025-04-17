@@ -16,6 +16,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   import { Badge } from "@/components/ui/badge"
+import Image from "next/image";
 
 type videoProps = {
   id: number | string;
@@ -45,7 +46,7 @@ export function VideoList() {
               className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-[200px_1fr]"
             >
               <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
-                <img
+                <Image
                   src={video.thumbnail || "/placeholder.svg"}
                   alt={video.title}
                   className="h-full w-full object-cover"

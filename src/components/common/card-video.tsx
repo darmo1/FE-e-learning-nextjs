@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { EnrollCourseAction } from "@/services/enrollments/action";
 import { toast } from "sonner";
+import { Conditional } from "./conditional";
+import Link from "next/link";
 
 export type CourseCardVideoProps = {
   title: string;
@@ -17,8 +19,9 @@ export const CardVideoCourse = ({
   video_url,
   id,
   href,
-  courseId
-}: CourseCardVideoProps) => {
+  courseId,
+  role,
+}: CourseCardVideoProps & { role: string }) => {
   const router = useRouter();
   const handleEnrollCourseButton = async (courseId: string | number) => {
     const { success, message } = await EnrollCourseAction(Number(courseId));
@@ -52,9 +55,19 @@ export const CardVideoCourse = ({
       )}
 
       <div className="p-4">
-        <Button onClick={() => handleEnrollCourseButton(courseId)}>
-          Enroll course
-        </Button>
+        <Conditional test={role === "student"}>
+          <Button onClick={() => handleEnrollCourseButton(courseId)}>
+            Enroll course
+          </Button>
+        </Conditional>
+
+        <Conditional test={role === "instructor"}>
+          <Link href={`/dashboard/course/create-course?courseId=${courseId}`}>
+            <Button>
+              Editar curso
+            </Button>
+          </Link>
+        </Conditional>
 
         {/* <h2 className="text-lg font-semibold truncate">{title}</h2>
         <p className="text-gray-600 text-sm line-clamp-2">{description}</p> */}

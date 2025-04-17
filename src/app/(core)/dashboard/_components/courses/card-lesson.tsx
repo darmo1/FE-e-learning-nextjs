@@ -13,8 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LessonsProps } from "../../course/[id]/page";
 import { Conditional } from "@/components/common/conditional";
+import { LessonsProps } from "../../course/types";
 
 export const CardLesson = ({ lessons }: { lessons: LessonsProps[] }) => {
   return (
