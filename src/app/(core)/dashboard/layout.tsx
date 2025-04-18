@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { fetchUser } from "@/services/users/actions";
 import { ReactNode } from "react";
