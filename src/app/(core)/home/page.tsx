@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Heading } from "@/components/ui/heading";
 import { CoursesCarousel } from "./_components/my-courses/courses-carousel";
 import { PollCoursesWrapper } from "./_components/poll-courses/poll-courses-wrapper";

@@ -1,7 +1,6 @@
 "use server";
 import { apiEndpoints } from "@/constants/endpoints.api";
 import { requestHandler } from "../../../utils/request-handler";
-import { AuthorizationHeaders } from "../../../utils/headers";
 import { ENDPOINT } from "@/constants/endpoints";
 import { CreateLessonSchema, EditLessonSchema } from "./schemas";
 import { replaceTokenUrl } from "../../../utils/string";
@@ -11,7 +10,6 @@ export const createLessonAction = async (
   formData: CreateLessonSchema,
   queryCourseId: number
 ) => {
-  
   const { ["upload-video"]: uploadVideo, ...body } = formData;
   const formVideo = new FormData();
   formVideo.set("upload-video", uploadVideo);
@@ -35,12 +33,11 @@ export const createLessonAction = async (
 };
 
 export const createDataLesson = async (_data, queryCourseId: number, video) => {
-  const headers = (await AuthorizationHeaders()) || {};
   try {
     await requestHandler({
       url: ENDPOINT.CREATE_LESSON,
       method: "POST",
-      headers,
+
       body: {
         title: _data.title,
         description: _data.description,
@@ -50,7 +47,7 @@ export const createDataLesson = async (_data, queryCourseId: number, video) => {
       },
     });
 
-    revalidatePath('/(core)/dashboard', 'layout')
+    revalidatePath("/(core)/dashboard", "layout");
 
     return {
       success: true,
@@ -68,13 +65,8 @@ export const createDataLesson = async (_data, queryCourseId: number, video) => {
 };
 
 export const getLessonsByCourse = async (courseId: string) => {
-  const headers = (await AuthorizationHeaders()) || {};
   const url = `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}`;
-  const response = await fetch(url, {
-    headers,
-  });
-
-  const lessons = await response.json();
+  const { data: lessons} = await requestHandler({ url });
 
   return lessons;
 };
@@ -110,19 +102,17 @@ export const editLessonAction = async (
 };
 
 export const editLessonById = async (_data, lessonId: number, video) => {
-  const headers = (await AuthorizationHeaders()) || {};
   try {
-      await requestHandler({
+    await requestHandler({
       url: replaceTokenUrl(ENDPOINT.UPDATE_LESSON, lessonId),
       method: "PATCH",
-      headers,
+
       body: {
         ...(_data.title && { title: _data.title }),
         ...(_data?.description && { description: _data.description }),
         ...(video?.secure_url && { video_url: video.secure_url }),
       },
     });
-
 
     return {
       success: true,

@@ -12,14 +12,12 @@ import Link from "next/link";
 import HighlightedHeading from "@/components/common/highlighted-heading";
 import { LessonsProps } from "@/app/(core)/dashboard/course/types";
 
-
 export default async function Page({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id: courseId } = await params;
-
 
   const url = replaceTokenUrl(ENDPOINT.GET_COURSE_BY_COURSE_ID, courseId);
   const { data }: { data: Course } = await requestHandler({
@@ -28,8 +26,11 @@ export default async function Page({
   const lessons: LessonsProps[] = await getLessonsByCourse(courseId);
 
   return (
-    <>
-    <HighlightedHeading highlight="Summary course" highlightClassName="before:bg-amber-500/30" />
+    <main className="px-2">
+      <HighlightedHeading
+        highlight="Summary course"
+        highlightClassName="before:bg-amber-500/30"
+      />
       <div className="flex justify-end my-2">
         <Link href={`/dashboard/course/edit-course?courseId=${courseId}`}>
           <Button>Editar curso</Button>
@@ -40,10 +41,22 @@ export default async function Page({
 
       {/* info lessons */}
       <Conditional test={Boolean(lessons.length)}>
-        {lessons.map(({ title, is_free }) => (
-          <CardLessonInfo key={uuid()} title={title} is_free={is_free} />
+        <div className="my-4">
+          <HighlightedHeading
+            highlight="Informacion de clases"
+            highlightClassName="before:bg-purple-500/30"
+            className="text-md"
+          />
+        </div>
+        {lessons.map(({ title, is_free, description = "" }) => (
+          <CardLessonInfo
+            key={uuid()}
+            title={title}
+            is_free={is_free}
+            description={description}
+          />
         ))}
       </Conditional>
-    </>
+    </main>
   );
 }

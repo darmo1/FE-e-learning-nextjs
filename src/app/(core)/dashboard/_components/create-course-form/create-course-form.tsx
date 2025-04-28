@@ -86,8 +86,8 @@ export const CreateCourseForm = () => {
 
       <div
         className={` ${
-          selectedImage ? "" : "border"
-        } rounded-md relative px-2 py-1`}
+          selectedImage ? "" : "border border-gray-300"
+        } rounded-md relative px-2 py-1 my-4`}
       >
         <Conditional test={!!selectedImage}>
           <div className="relative md:max-w-[200px]">

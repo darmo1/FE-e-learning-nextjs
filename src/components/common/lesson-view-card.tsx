@@ -14,7 +14,7 @@ export const LessonViewCard = ({
   video_url,
   onClick,
   description,
-}: LessonViewCard) => {
+}: LessonViewCard & {  }) => {
   const [showVideo, setShowVideo] = useState(false);
   return (
     <div className="p-6">
@@ -29,6 +29,7 @@ export const LessonViewCard = ({
               </p>
             </div>
           </div>
+    
           <Button
             variant="ghost"
             size="icon"

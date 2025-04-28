@@ -1,47 +1,58 @@
+import { redirect } from "next/navigation";
+import { getCurrentPath } from "./get-current-path";
+import { headerAccessTokenCookie } from "./headers";
+
 type ResquestHandlerProps = Omit<RequestInit, "body"> & {
   url: string;
-  method?: string;
-  headers?: Record<string, string>;
-  msgPrefix?: string;
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   credentials?: string;
+  headers?: HeadersInit;
+  msgPrefix?: string;
 };
 
 export const requestHandler = async ({
   url,
   method = "GET",
-  headers = {},
   body,
+  headers = {},
   credentials = "include",
   ...options
 }: ResquestHandlerProps) => {
-  let response;
+  let response: Response;
   try {
+    const authHeaders = (await headerAccessTokenCookie()) || {};
+
     const config = {
       method,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        ...((headers as Record<string, string>) || {}),
+        ...authHeaders,
+        ...(headers || {}),
       },
       credentials,
       ...options,
-      body: JSON.stringify(body),
+      body: body ? JSON.stringify(body) : undefined,
     };
 
     response = await fetch(url, config);
+    if (response.status === 401) {
+      const currentPath = await getCurrentPath();
+      console.log("⚠️ Token vencido. Redirigiendo... 🚨");
+      redirect(`/auth/refresh?redirect=${encodeURIComponent(currentPath)}`);
+      //  Importante: después del redirect, ¡NO sigas el flujo!
+    }
 
     if (response.ok) {
       let data;
-      let setCookie;
+
       try {
-        setCookie = (response.headers as Headers).get("set-cookie");
         data = await response.json();
       } catch (e) {
         console.log(e, "error cookies");
       }
-      return { data, cookie: setCookie || '', response };
-
+      return { data, response };
     } else {
       let errorData;
       try {

@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 
 export const setCookies = async (name: string, value: string) => {
+  "use server"
   const _cookies = await cookies();
   return _cookies.set({
     httpOnly: true,
@@ -23,4 +24,11 @@ export const getCookie = async (cookieName: string) => {
 export const deleteCookie = async (cookieName: string) => {
   const _cookies = await cookies();
   return _cookies.delete(cookieName);
+}
+
+
+export async function getAccessToken() {
+  const accessToken = await getCookie("access_token");
+  if (!accessToken) throw new Error("No access token found");
+  return accessToken;
 }

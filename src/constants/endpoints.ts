@@ -16,4 +16,7 @@ export const ENDPOINT = {
   COURSES_ENROLLED: `${HOST}${prefix}/enrollments/user`,
   CHECKOUT_SUCCESS: `${HOST}/checkout/success`,
   USER_INFO: `${HOST}${prefix}/users/info`,
+  REFRESH_TOKEN: `${HOST}${prefix}/auth/refresh`,
+  ANALYTICS_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/courses`,
+  ANALYTICS_SUMMARY_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/summary`
 };

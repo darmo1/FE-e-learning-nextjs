@@ -3,28 +3,53 @@ import { ENDPOINT } from "@/constants/endpoints";
 import { requestHandler } from "../../../utils/request-handler";
 import { ResponseFetchUser, UserLoginProps } from "./types";
 import { setCookies } from "../../../utils/cookies";
-import { AuthorizationHeaders } from "../../../utils/headers";
 import { userRegisterSchema } from "./schemas";
+import { parse } from "cookie";
+
+import { cache } from "react";
+import { headerAccessTokenCookie } from "../../../utils/headers";
 
 export const userLogin = async (data: UserLoginProps) => {
-  const url = ENDPOINT.LOGIN;
   try {
-    const { data: response, cookie } = await requestHandler({
-      url,
+    const response = await fetch(ENDPOINT.LOGIN, {
       method: "POST",
-      body: data,
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
-    if (cookie) {
-      const [_cookie] = cookie.split(";");
-      const [cookieName, cookieValue] = _cookie.split("=");
-      await setCookies(cookieName, cookieValue);
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (error) {
+        errorData = { message: "something went wrong", error };
+      }
+
+      throw new Error(JSON.stringify(errorData));
     }
 
+    const cookie = (response.headers as Headers).get("set-cookie");
+    if (cookie) {
+      const cookiesArray = cookie.split(/,(?=\s*\w+=)/); // separa por coma segura
+      const cookiesParsed = cookiesArray.map((cookieStr) =>
+        parse(cookieStr.trim())
+      );
+
+      // Combina todas las cookies en un solo objeto
+      const { access_token = "", refresh_token = "" } = Object.assign(
+        {},
+        ...cookiesParsed
+      );
+      await setCookies("access_token", access_token);
+      await setCookies("refresh_token", refresh_token);
+    }
+    const responseData = await response.json();
     return {
       success: true,
       message: "Inicio de sesión exitoso",
-      data: response,
+      data: responseData,
     };
   } catch (error) {
     const errorMessage = parseErrorMessage(error);
@@ -96,15 +121,79 @@ export const userRegisterAction = async (
   }
 };
 
-export const fetchUser = async (): Promise<{
-  data: ResponseFetchUser;
-  response: Response;
-}> => {
-  const headers = (await AuthorizationHeaders()) || {};
-  const response = await requestHandler({
-    url: ENDPOINT.USER_INFO,
-    headers,
-  });
+export const fetchUser = cache(
+  async (): Promise<{
+    data: ResponseFetchUser;
+    response: Response;
+  }> => {
+    try {
+   
+      const { data, response } = await requestHandler({
+        url: ENDPOINT.USER_INFO,
+      });
 
-  return response;
-};
+
+      return {
+        data,
+        response: response,
+      };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+);
+
+export const safeFetchUser = async () => {
+  try {
+    const authHeaders = (await headerAccessTokenCookie()) || {};
+
+    const response = await fetch(ENDPOINT.USER_INFO, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders,
+      },
+      credentials: "include",
+    });
+
+    if (response.status === 401) {
+      console.warn("fetchUserSafe: 401 Unauthorized");
+      return {
+        data: {
+          role: "",
+          isLogged: false,
+          user: null,
+        },
+        response: null,
+      };
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error en fetchUserSafe:", errorData);
+      return {
+        data: {
+          role: "",
+          isLogged: false,
+          user: null,
+        },
+        response: null,
+      };
+    }
+
+    const data = await response.json();
+    return { data, response };
+  } catch (error) {
+    console.error("Error de red o fetchUserSafe general:", error);
+    return {
+      data: {
+        role: "",
+        isLogged: false,
+        user: null,
+      },
+      response: null,
+    };
+  }
+}
+

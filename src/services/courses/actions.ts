@@ -2,7 +2,6 @@
 
 import { CreateCourseProps } from "./schemas";
 import { ENDPOINT } from "@/constants/endpoints";
-import { AuthorizationHeaders } from "../../../utils/headers";
 import { requestHandler } from "../../../utils/request-handler";
 import { apiEndpoints } from "@/constants/endpoints.api";
 import { replaceTokenUrl } from "../../../utils/string";
@@ -16,7 +15,7 @@ type responseType = {
 };
 
 export const createCourseAction = async (
-  formData: CreateCourseProps,
+  formData: CreateCourseProps
 ): Promise<responseType> => {
   const { image } = formData;
   const _formData = new FormData();
@@ -53,22 +52,21 @@ export const createCourse = async (
   imageUrl: string
 ) => {
   try {
-    const headers = (await AuthorizationHeaders()) || {};
+   
     const url = ENDPOINT.CREATE_COURSE;
-    const { data: course }  = await requestHandler({
+    const { data: course } = await requestHandler({
       url,
       method: "POST",
       body: {
         ...data,
         image_url: imageUrl,
       },
-      headers,
     });
 
     return {
       success: true,
       message: "You form have been successfull",
-      data: course
+      data: course,
     };
   } catch (error) {
     console.error("Error creating course:", error);
@@ -121,8 +119,7 @@ export const editCourse = async (
   imageUrl?: string
 ) => {
   try {
-    const headers = (await AuthorizationHeaders()) || {};
-    const url =  replaceTokenUrl(ENDPOINT.EDIT_COURSE, courseId);
+    const url = replaceTokenUrl(ENDPOINT.EDIT_COURSE, courseId);
 
     requestHandler({
       url,
@@ -131,7 +128,6 @@ export const editCourse = async (
         ...data,
         ...(imageUrl && { image_url: imageUrl }),
       },
-      headers,
     });
 
     return {
@@ -149,35 +145,23 @@ export const editCourse = async (
 };
 
 export const getCoursesByUser = async () => {
-  const headers = (await AuthorizationHeaders()) || {};
-  const response = await fetch(ENDPOINT.GET_COURSES_BY_USER, {
-    headers,
+  const { data: courses } = await requestHandler({
+    url: ENDPOINT.GET_COURSES_BY_USER,
   });
-
-  const courses = await response.json();
   return courses;
 };
 
 export const getDemoCourse = async (courseId: string) => {
-  const headers = (await AuthorizationHeaders()) || {};
-
-  const response = await fetch(
-    `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}/demo`,
-    {
-      headers,
-    }
-  );
-
-  const course = await response.json();
+  const { data: course } = await requestHandler({
+    url: `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}/demo`,
+  });
 
   return course;
 };
 
 export const getCoursesByInstructor = async () => {
-  const headers = (await AuthorizationHeaders()) || {};
   const response = await requestHandler({
     url: ENDPOINT.GET_COURSES_BY_INSTRUCTOR,
-    headers,
   });
 
   return response;

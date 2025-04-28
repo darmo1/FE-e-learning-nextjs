@@ -18,8 +18,8 @@ export default function HighlightedHeading({
   highlightClassName,
 }: HighlightedHeadingProps) {
   return (
-    <section className="w-full bg-background">
-      <div className="container px-4 md:px-6">
+    <section className="w-full bg-background py-8">
+      <div className="container ">
         <div className="flex flex-col   ">
           <h1 className={cn("font-bold tracking-tighter sm:text-4xl  ", className)}>
             {before}{" "}
@@ -28,6 +28,7 @@ export default function HighlightedHeading({
                 "relative inline-block",
                 "before:absolute before:inset-x-0 before:-bottom-1 before:h-3 before:bg-yellow/30 before:rounded-sm",
                 highlightClassName,
+              
               )}
             >
               {highlight}
