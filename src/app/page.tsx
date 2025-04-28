@@ -1,36 +1,36 @@
-import { redirect } from "next/navigation";
-import { getCookie } from "../../utils/cookies";
+'use client'
+export const dynamic = "force-dynamic";
+
 import {
   SectionFeatures,
   SectionHero,
   SectionPricing,
 } from "./(core)/_components/home";
-import { fetchUser } from "@/services/users/actions";
+import { redirect } from "next/navigation";
+import { useUser } from "./user-context";
 
-export default async function Page() {
-  const token = await getCookie("access_token");
+export default function Page() {
+  const { isLogged, role } = useUser();
 
-  if (token) {
-    const { data } = await fetchUser();
-    const { isLogged, role } = data;
 
-    if (isLogged && role === "admin") {
-      return redirect("/admin");
-    }
-    if (isLogged && role === "instructor") {
-      return redirect("/dashboard");
-    }
+  if (isLogged && role === "admin") {
+    return redirect("/admin");
+  }
+  if (isLogged && role === "instructor") {
+    return redirect("/dashboard");
+  }
 
-    if (isLogged && role === "student") {
-      return redirect("/home");
-    }
+  if (isLogged && role === "student") {
+    return redirect("/home");
   }
 
   return (
-    <main className="  mx-auto">
-      <SectionHero />
-      <SectionFeatures />
-      <SectionPricing />
-    </main>
+        <main className="  mx-auto">
+          <SectionHero />
+          <SectionFeatures />
+          <SectionPricing />
+        </main>
+
+
   );
 }

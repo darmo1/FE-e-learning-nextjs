@@ -16,11 +16,25 @@ import {
   AuthRegister,
   AuthRegisterWrapper,
 } from ".";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export const Auth = () => {
+  const pathname = usePathname()
   const searchParams = useSearchParams();
   const register = searchParams.get("register");
+
+  useEffect(() => {
+    if(pathname.includes('/auth')){
+      logout();
+    }
+    async function logout() {
+      await fetch("/api/logout", {
+        method: "POST"
+      });
+    }
+
+  }, [pathname]);
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">

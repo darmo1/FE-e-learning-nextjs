@@ -16,6 +16,7 @@ export default async function PresentationCoursePage({
   const { courseId, coursename } = await params;
 
   const contentCourse: demoCourseProps = await getDemoCourse(courseId);
+
   return (
     <div className="grid md:grid-cols-4 py-16">
       <Suspense fallback={<div>Cargando...</div>}>

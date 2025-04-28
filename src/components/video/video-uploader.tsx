@@ -177,9 +177,15 @@ export function VideoUploader() {
           {" "}
           Asegúrate de tener los derechos de los videos que subas
         </p>
-        <input type="submit" value="Enviar" disabled={pending} />
+        <Button asChild variant={"default"} size="sm" className="mr-2">
+          <input type="submit" value="Enviar" disabled={pending} />
+        </Button>
 
-        <Button variant="outline" size="sm" disabled={isUploading}>
+        <Button
+          variant="secondary"
+          size="sm"
+          disabled={isUploading}
+        >
           Cancelar
         </Button>
       </CardFooter>

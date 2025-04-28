@@ -42,7 +42,7 @@ export const CardCourse = ({
           </div>
         )}
 
-        <div className="p-4">
+        <div className="p-4 mx-h-[190px] h-[190px]">
           <h2 className="text-lg font-semibold truncate">{title}</h2>
           <p className="text-gray-600 text-sm line-clamp-2">{description}</p>
           <div className="mt-2 flex justify-between items-center">

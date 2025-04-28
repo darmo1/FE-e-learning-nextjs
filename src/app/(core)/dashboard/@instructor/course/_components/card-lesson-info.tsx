@@ -25,7 +25,7 @@ export const CardLessonInfo = ({
       </div>
       <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
         <Badge variant="outline" className="flex items-center gap-1">
-          <VideoIcon />
+          <VideoIcon  className="w-12 h-12"/>
         </Badge>
         <Badge variant="outline" className="flex items-center gap-1">
           {is_free ? "free" : "payment"}

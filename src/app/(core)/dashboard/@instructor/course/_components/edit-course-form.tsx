@@ -37,7 +37,7 @@ export const EditCourseForm = async ({
   }
   return (
     <TabsContent value="details" className="space-y-4 pt-4">
-      <Card>
+      <Card className="border border-gray-300">
         <CardHeader>
           <CardTitle>Course Information</CardTitle>
           <CardDescription>
@@ -45,7 +45,7 @@ export const EditCourseForm = async ({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <CreateCourseFormWrapper course={courseDataForm}>
+          <CreateCourseFormWrapper course={courseDataForm} isEditPage>
             <CreateCourseForm />
           </CreateCourseFormWrapper>
         </CardContent>
