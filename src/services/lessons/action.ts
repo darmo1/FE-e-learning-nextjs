@@ -6,6 +6,12 @@ import { CreateLessonSchema, EditLessonSchema } from "./schemas";
 import { replaceTokenUrl } from "../../../utils/string";
 import { revalidatePath } from "next/cache";
 
+export function getApiUrl(path: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_HOST_FRONTEND || "http://localhost:3000";
+  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+
 export const createLessonAction = async (
   formData: CreateLessonSchema,
   queryCourseId: number
@@ -14,7 +20,7 @@ export const createLessonAction = async (
   const formVideo = new FormData();
   formVideo.set("upload-video", uploadVideo);
   try {
-    const res = await fetch(apiEndpoints.UPLOAD_VIDEO, {
+    const res = await fetch(getApiUrl("/api/upload-video"), {
       method: "POST",
       body: formVideo,
     });
