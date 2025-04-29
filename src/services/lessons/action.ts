@@ -1,15 +1,11 @@
 "use server";
-import { apiEndpoints } from "@/constants/endpoints.api";
+import { apiEndpoints, getApiUrl } from "@/constants/endpoints.api";
 import { requestHandler } from "../../../utils/request-handler";
 import { ENDPOINT } from "@/constants/endpoints";
 import { CreateLessonSchema, EditLessonSchema } from "./schemas";
 import { replaceTokenUrl } from "../../../utils/string";
 import { revalidatePath } from "next/cache";
 
-export function getApiUrl(path: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_HOST_FRONTEND || "http://localhost:3000";
-  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
-}
 
 
 export const createLessonAction = async (
