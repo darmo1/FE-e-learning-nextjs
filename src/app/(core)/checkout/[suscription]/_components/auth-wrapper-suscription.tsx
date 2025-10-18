@@ -50,7 +50,10 @@ export const AuthWrapperSuscription: FC<
 
   return (
     <FormProvider {...formMethods}>
-      <form action={dispatch}>{children}</form>
+      <form 
+      action={dispatch}
+      className="col-span-1 col-start-2"
+      >{children}</form>
     </FormProvider>
   );
 };

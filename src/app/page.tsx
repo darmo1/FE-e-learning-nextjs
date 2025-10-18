@@ -11,6 +11,7 @@ import { useUser } from "./user-context";
 
 export default function Page() {
   const { isLogged, role } = useUser();
+  console.log("User role:", role, "Is logged in:", isLogged);
 
 
   if (isLogged && role === "admin") {
@@ -21,7 +22,7 @@ export default function Page() {
   }
 
   if (isLogged && role === "student") {
-    return redirect("/home");
+    return redirect("/dashboard");
   }
 
   return (

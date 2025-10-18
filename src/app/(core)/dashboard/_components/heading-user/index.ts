@@ -1,0 +1,1 @@
+export { HeadingUser } from './heading-user';

@@ -14,21 +14,15 @@ export default async function Home() {
   const token = await getCookie("access_token");
   const isLogged = !!token;
 
-  if (!isLogged) {
-    return redirect("/");
-  }
+  if (!isLogged) return redirect("/");
 
   const { data: courses } = await getCoursesEnrolled();
   const showCarouselCourses = Boolean((courses || []).length);
 
   return (
     <>
-      <Container className="py-16">
-        <Heading
-          title="Bienvenido a la app"
-          description="Esta es la pagina de inicio"
-          className="py-4"
-        />
+      <Container className="py-2">
+        <Heading title="Bienvenido a la app" description="" className="py-4" />
         <div>
           <Conditional
             test={showCarouselCourses}

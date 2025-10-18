@@ -1,29 +1,27 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 import { v4 as uuid } from "uuid";
 import { Conditional } from "./conditional";
 
-export type CourseCardProps = {
+export type CardProps = {
   id?: string | number;
   price?: number;
   title: string;
   description: string;
   category: string;
   image_url: string | null;
-  href?: string;
-  vertical?: boolean;
+  href: string;
 };
 
-export const CardCourse = ({
+export const VerticalCard = ({
+  href,
   category,
   description,
   image_url,
   title,
-  price = 0,
-  href = "#",
-}: CourseCardProps) => {
+  price,
+}: CardProps) => {
   return (
     <Link href={href} key={uuid()} className="group">
       <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">

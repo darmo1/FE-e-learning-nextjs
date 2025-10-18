@@ -1,6 +1,7 @@
 import { Heading } from "@/components/ui/heading";
 import { AuthWrapperSuscription, CtaStripe } from "./_components";
 import { AuthRegister } from "../../auth/_components/auth-form";
+import { SummaryPlan } from "./_components/summary-plan";
 
 type SuscriptionProps = "basic" | "pro" | "custom";
 
@@ -36,10 +37,7 @@ export default async function CheckoutPage({
 
   return (
     <>
-      <Heading
-        title="Suscription"
-        description="Bienvenido a la pagina de suscription"
-      />
+      <SummaryPlan />
 
       <AuthWrapperSuscription product={productToBuy}>
         <AuthRegister />

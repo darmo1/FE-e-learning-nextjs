@@ -15,19 +15,21 @@ export default async function Page({
 
   return (
     <Suspense fallback={<div>Cargando...</div>}>
-      <CourseContextProvider>
-        <HighlightedHeading
-                    highlight="Edición de curso y clases"
-                    highlightClassName="before:bg-amber-500/30"
-                    className="text-md"
-                  />
-        <EditCourseWrapper>
-          <EditCourseForm searchParams={searchParams} />
-          <Suspense fallback={<div>Cargando...</div>}>
-            <EditLessonsWrapper courseId={courseId} />
-          </Suspense>
-        </EditCourseWrapper>
-      </CourseContextProvider>
+    
+        <CourseContextProvider>
+          <HighlightedHeading
+            highlight="Edición de curso y clases"
+            highlightClassName="before:bg-amber-500/30"
+            className="text-md"
+          />
+          <EditCourseWrapper>
+            <EditCourseForm searchParams={searchParams} />
+            <Suspense fallback={<div>Cargando...</div>}>
+              <EditLessonsWrapper courseId={courseId} />
+            </Suspense>
+          </EditCourseWrapper>
+        </CourseContextProvider>
+
     </Suspense>
   );
 }

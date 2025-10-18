@@ -1,11 +1,17 @@
+import { Heading } from "@/components/ui/heading";
+
 export default function CheckoutLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <main className="max-w-4xl mx-auto">{children}</main>
-    </div>
+    <section>
+      <Heading
+        title="Suscription"
+        description="Bienvenido a la pagina de suscription"
+      />
+      <main className="grid md:grid-cols-2 gap-6 border">{children}</main>
+    </section>
   );
 }

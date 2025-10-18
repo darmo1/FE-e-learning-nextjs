@@ -32,8 +32,12 @@ export const TopToolBar = () => {
     >
       <Sheet>
         <SheetTrigger asChild>
-          <div className="flex justify-between mb-4">
-            <Heading title={currentLesson?.title} description="" />
+          <div className="flex justify-between ">
+            <Heading 
+            title={currentLesson?.title} 
+            description="" 
+            className="my-0 py-0"
+            />
             <Button variant="outline" >
               <div className="w-full">Ver clases</div>
               <Menu className="h-5 w-10" />

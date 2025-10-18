@@ -21,9 +21,11 @@ export default async function LayoutCourseId({
 
   return (
     <CourseProvider courses={courses} lessons={lessons}>
+      <div className="w-full px-8">
       <TopToolBar />
-      <div className="w-full">
-      {children}
+      <div className="my-2">
+         {children}
+      </div>   
       <BottomToolBar />
       </div>
     </CourseProvider>

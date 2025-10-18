@@ -37,15 +37,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const token = await AuthorizationHeaders();
-
-  async function getUser() {
-    const { data } = await safeFetchUser();
-
-    return data;
-  }
-
   const userData = !isEmpty(token)
-    ? await getUser()
+    ? (await safeFetchUser()).data
     : { isLogged: false, role: "" };
 
   return (
