@@ -45,8 +45,9 @@ export function CoursesCarousel({
               <CarouselItem
                 key={course.id}
                 className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                
               >
-                <CourseCard {...course} />
+                <CourseCard {...course} orientation="horizontal" />
               </CarouselItem>
             ))}
           </CarouselContent>

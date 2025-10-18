@@ -37,6 +37,8 @@ export const requestHandler = async ({
     };
 
     response = await fetch(url, config);
+    console.log("Fetch response:", response);
+
     if (response.status === 401) {
       const currentPath = await getCurrentPath();
       console.log("⚠️ Token vencido. Redirigiendo... 🚨");
@@ -60,7 +62,6 @@ export const requestHandler = async ({
       } catch (error) {
         errorData = { message: "something went wrong", error };
       }
-
       throw new Error(JSON.stringify(errorData));
     }
   } catch (error) {

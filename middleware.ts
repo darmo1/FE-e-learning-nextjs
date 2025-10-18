@@ -11,6 +11,7 @@ export function middleware(req: NextRequest) {
 
   if (isProtected) {
     const accessToken = req.cookies.get("access_token");
+    console.log('Access Token from middleware:', accessToken);
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", req.url));
     }

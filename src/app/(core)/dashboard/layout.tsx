@@ -4,6 +4,7 @@ import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { fetchUser } from "@/services/users/actions";
 import { ReactNode } from "react";
 import { UserProvider } from "../../user-context";
+import { BreadcrumbMenu } from "@/components/common/breadcrumb-menu";
 
 export default async function DashboardLayout({
   children,
@@ -18,13 +19,16 @@ export default async function DashboardLayout({
 }) {
 
   const { data } = await fetchUser();
-  const { role, isLogged } = data;
+  console.log("data layout", data);
+  const { role, isLogged, full_name: fullName} = data;
 
   return (
-    <UserProvider role={role} isLogged={isLogged}>
-      <div className="flex min-h-screen w-full flex-col md:flex-row bg-white">
+    <UserProvider role={role} isLogged={isLogged} fullName={fullName}>
+      <div className="flex grow w-full flex-col md:flex-row bg-white">
+      
         <DashboardNav />
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1 mx-8 my-4">
+            <BreadcrumbMenu role={role}/>
           {role === "instructor" ? instructor : null}
           {role === "admin" ? admin : null}
           {role === "student" ? (

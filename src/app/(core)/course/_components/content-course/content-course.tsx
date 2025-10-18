@@ -21,7 +21,7 @@ export const ContentCourse = async ({
     data: { role },
   } = await fetchUser();
   const { content, demo } = contentCourse;
-
+console.log("contentCourse", contentCourse);
   const courseData =
     demo.length > 0
       ? demo.map((course) => ({

@@ -26,11 +26,15 @@ export const PlayLesson = () => {
   return (
     <div>
       <div>
-        <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
+        <div className="relative aspect-video overflow-hidden rounded-md bg-muted ">
+       
           <video
             controls
             className="h-full w-full object-cover"
             key={selectedLesson.id}
+            controlsList="nodownload"
+            onContextMenu={() => false}
+          
           >
             <source src={selectedLesson.video_url} type="video/mp4" />
             Tu navegador no soporta la reproducción de video.

@@ -18,7 +18,8 @@ export type LessonsProps = {
   video_url?: string,
   description?: string
   created_at: Date
-  updated_at: Date
+  updated_at: Date,
+  position: number
 }
 
 export type CourseContextProps = {

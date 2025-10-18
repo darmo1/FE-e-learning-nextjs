@@ -24,8 +24,8 @@ export const CardCourseInfo = ({
     <>
       <HighlightedHeading
         highlight="Informacion de cursos"
-        highlightClassName="before:bg-purple-500/30"
-        className="md:text-md"
+        highlightClassName="before:bg-purple-500/30 mb-6"
+        className="text-xl p-0"
       />
       <Card className="border border-gray-200">
         <CardHeader>
