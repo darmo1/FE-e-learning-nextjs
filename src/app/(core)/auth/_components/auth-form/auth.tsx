@@ -42,14 +42,14 @@ export const Auth = () => {
         <Tabs defaultValue={register ? "signup" : "login"} className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl">Welcome back</CardTitle>
+              <CardTitle className="text-2xl">Welcome </CardTitle>
               <TabsList className="grid w-full max-w-[200px] grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="signup">Sign up</TabsTrigger>
               </TabsList>
             </div>
             <CardDescription>
-              Enter your credentials to access your account
+              Entra con tus credenciales para acceder a la cuenta
             </CardDescription>
           </CardHeader>
 

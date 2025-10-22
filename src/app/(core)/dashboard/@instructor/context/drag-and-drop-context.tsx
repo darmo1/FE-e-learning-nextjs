@@ -3,7 +3,6 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
-  DragOverlay,
   PointerSensor,
   useSensor,
   useSensors,
@@ -13,7 +12,6 @@ import {
   startTransition,
   useContext,
   useMemo,
-  useOptimistic,
   useState,
 } from "react";
 import { LessonsProps } from "../../course/types";
@@ -40,12 +38,9 @@ export const DragAndDropContext = ({
 }) => {
  // const [optimisticState, addOptimistic] = useOptimistic(lessons, updateFn);
   const [optimisticState, addOptimistic] = useState<LessonsProps[]>(lessons);
-
-  console.log({ optimisticState }, "##optimisticState 🎉🤓");
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragEnd = (event: DragEndEvent) => {
-    console.log({ event }, "##event");
     const { active, over } = event;
     if (!over || active.id === over.id) {
 
@@ -91,8 +86,7 @@ export const DragAndDropContext = ({
   );
 };
 
-function updateFn(currentState, optimisticValue: LessonsProps[]) {
-  console.log({ currentState, optimisticValue }, "##updateFn");
-  return optimisticValue.length ? optimisticValue : currentState;
-;
-}
+// function updateFn(currentState, optimisticValue: LessonsProps[]) {
+//   return optimisticValue.length ? optimisticValue : currentState;
+// ;
+// }

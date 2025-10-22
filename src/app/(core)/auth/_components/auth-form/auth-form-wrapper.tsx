@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { requestHandler } from "../../../../../../utils/request-handler";
 import { ENDPOINT } from "@/constants/endpoints";
+import { useRouter } from "next/navigation";
 
 type AuthFormProps = {
   email: string;
   password: string;
 };
 export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
+  const router = useRouter()
   const formMethods = useForm<AuthFormProps>({
     defaultValues: defaultValuesLoginForm,
   });
@@ -75,7 +77,7 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
                 </>
               )}
             </Button>
-            <Button variant="link" className="px-0 font-normal" size="sm">
+            <Button type={"button"} variant="link" className="px-0 font-normal" size="sm" onClick={() => router.push('/forgot-password')}>
               Forgot password?
             </Button>
           </div>

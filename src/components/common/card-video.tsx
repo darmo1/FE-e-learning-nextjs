@@ -36,6 +36,8 @@ export const CardVideoCourse = ({
       });
     }
   };
+
+
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">
       {video_url ? (
@@ -67,6 +69,14 @@ export const CardVideoCourse = ({
               Editar curso
             </Button>
           </Link>
+        </Conditional>
+
+        <Conditional test={role === "admin"}>
+          <div>Admin</div>
+        </Conditional>
+
+        <Conditional test={role !== "admin" && role !== "instructor" && role !== "student"}>
+        <Link href="/#pricing">Ver planes</Link>
         </Conditional>
 
         {/* <h2 className="text-lg font-semibold truncate">{title}</h2>

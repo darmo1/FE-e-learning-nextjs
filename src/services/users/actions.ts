@@ -5,7 +5,6 @@ import { ResponseFetchUser, UserLoginProps } from "./types";
 import { setCookies } from "../../../utils/cookies";
 import { userRegisterSchema } from "./schemas";
 import { parse } from "cookie";
-
 import { cache } from "react";
 import { headerAccessTokenCookie } from "../../../utils/headers";
 
@@ -64,6 +63,10 @@ const parseErrorMessage = (error: unknown): string => {
       if (parsedError && parsedError.message) {
         return parsedError.message;
       }
+
+      if (parsedError && parsedError.error) {
+        return parsedError.error;
+      }
     } catch (parseError) {
       console.error("Error al parsear el error:", parseError);
     }
@@ -116,7 +119,9 @@ export const userRegisterAction = async (
       error: null,
     };
   } catch (error) {
+ 
     const errorMessage = parseErrorMessage(error);
+    console.log("Parsed error message:", errorMessage); 
     return { success: false, message: errorMessage, data: null, error: error };
   }
 };

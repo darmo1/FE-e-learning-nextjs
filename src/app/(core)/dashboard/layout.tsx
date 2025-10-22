@@ -19,7 +19,6 @@ export default async function DashboardLayout({
 }) {
 
   const { data } = await fetchUser();
-  console.log("data layout", data);
   const { role, isLogged, full_name: fullName} = data;
 
   return (

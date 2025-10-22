@@ -16,7 +16,7 @@ export const Header = () => {
 
   const menuLogged: MenuProps = [{ name: "Mi cuenta", href: "/auth" }];
   const menuNotLogged: MenuProps = [
-    { name: "Precios", href: "/#price" },
+    { name: "Precios", href: "/#pricing" },
     { name: "Registrarse", href: "/auth?register=true" },
     { name: "Login", href: "/auth" },
   ];
@@ -24,8 +24,7 @@ export const Header = () => {
   const menu: MenuProps = !!role ? menuLogged : menuNotLogged;
 
   const getRedirectLogo = (role: string = "") => {
-    if (role === "instructor" || role === "admin") return "/dashboard";
-    if (role === "student") return "/home";
+    if (role === "instructor" || role === "admin" || role === "student") return "/dashboard";
     return "/";
   };
 

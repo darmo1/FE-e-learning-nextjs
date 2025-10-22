@@ -15,6 +15,7 @@ import {
 import { CreateCourseFormWrapperProps } from "./types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { ArrowRight, LoaderCircle } from "lucide-react";
 
 export const CreateCourseFormWrapper: FC<
   PropsWithChildren<{
@@ -59,7 +60,7 @@ export const CreateCourseFormWrapper: FC<
           toast.success("El curso ha sido actualizado exitosamente", {});
         }
       } else {
-        const { success , data: course} = await createCourseAction(data);
+        const { success, data: course } = await createCourseAction(data);
         if (success) {
           setCurrentStep(2);
           const currentPath = window.location.pathname;
@@ -76,17 +77,22 @@ export const CreateCourseFormWrapper: FC<
         <form onSubmit={handleSubmit(_onSubmit)}>
           {children}
 
-          <input
-            type="submit"
-            className="bg-black border text-white px-4 py-2 rounded-md w-1/3 flex mr-0 m-auto"
-            value={
-              isEditPage
-                ? "Editar curso ->"
-                : "Create Course & Continue to Lessons"
-            }
-            disabled={isPending}
-          />
-          {isPending ? <div>...Loading</div> : null}
+          <div
+            className={`${
+              isPending ? "bg-black/75" : "bg-black"
+            } border text-white flex px-4 py-2 rounded-md w-fit  ms-auto me-0 items-center `}
+          >
+            <input
+              type="submit"
+              value={
+                isEditPage
+                  ? "Editar curso"
+                  : "Create Course & Continue to Lessons"
+              }
+              disabled={isPending}
+            />
+            {isPending ? <LoaderCircle  className="w-4 h-4 text-white ms-2 animate-spin" /> : <ArrowRight className="w-4 h-4 text-white ms-2" />  }
+          </div>
         </form>
       </FormProvider>
     </Conditional>
