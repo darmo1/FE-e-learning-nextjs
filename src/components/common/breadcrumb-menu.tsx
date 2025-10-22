@@ -46,7 +46,6 @@ export function BreadcrumbMenu({ role }: { role: string | null }) {
   };
 
   const breadcrumbMenu = getBreadcrumbMenu(role);
-  console.log({ breadcrumbMenu }, "##breadcrumbMenu");
 
   return (
     <Breadcrumb className="mb-4">

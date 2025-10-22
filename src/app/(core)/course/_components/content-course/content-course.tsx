@@ -1,3 +1,5 @@
+'use client'
+
 import { v4 as uuid } from "uuid";
 import { demoCourseProps } from "../../[coursename]/[courseId]/page";
 import { Video as VideoIcon } from "lucide-react";
@@ -6,22 +8,18 @@ import {
   CourseCardVideoProps,
 } from "@/components/common/card-video";
 import { fromHyphenatedToString } from "../../../../../../utils/string";
-import { fetchUser } from "@/services/users/actions";
-import { Conditional } from "@/components/common/conditional";
-import { isEmpty } from "../../../../../../utils/common";
+import { useUser } from "@/app/user-context";
 
-export const ContentCourse = async ({
+export const ContentCourse = ({
   contentCourse,
   coursename,
 }: {
   contentCourse: demoCourseProps;
   coursename: string;
 }) => {
-  const {
-    data: { role },
-  } = await fetchUser();
+  const { role } = useUser();
   const { content, demo } = contentCourse;
-console.log("contentCourse", contentCourse);
+
   const courseData =
     demo.length > 0
       ? demo.map((course) => ({
@@ -34,7 +32,7 @@ console.log("contentCourse", contentCourse);
 
   return (
     <>
-      <div className="md- col-span-2">
+      <div className="md:col-span-2">
         <h1 className="text-2xl font-bold">
           {fromHyphenatedToString(coursename)}
         </h1>
@@ -54,10 +52,10 @@ console.log("contentCourse", contentCourse);
           </ul>
         </div>
       </div>
-      <div className="md- col-span-2">
-        <Conditional test={!isEmpty(courseData)}>
+      <div className="md:col-start-4  md:col-span-1">
+        {/* <Conditional test={!isEmpty(courseData)}> */}
           <CardVideoCourse {...courseData} role={role} />
-        </Conditional>
+        {/* </Conditional> */}
       </div>
       <div></div>
     </>

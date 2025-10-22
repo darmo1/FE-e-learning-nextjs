@@ -18,5 +18,6 @@ export const ENDPOINT = {
   USER_INFO: `${HOST}${prefix}/users/info`,
   REFRESH_TOKEN: `${HOST}${prefix}/auth/refresh`,
   ANALYTICS_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/courses`,
-  ANALYTICS_SUMMARY_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/summary`
+  ANALYTICS_SUMMARY_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/summary`,
+  GET_ALL_COURSES: `${HOST}${prefix}/course/all`,
 };

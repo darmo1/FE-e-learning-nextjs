@@ -1,6 +1,5 @@
 "use client";
 
-
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@/app/user-context";
 import { LayoutDashboardIcon } from "lucide-react";
@@ -19,17 +18,23 @@ type NavItems = {
 export function DashboardNav() {
   const { role } = useUser();
   const pathName = usePathname();
-  console.log("pathName", pathName);
-
   const navItems: NavItems = [
-    {
-      title: "Mis cursos",
-      href: "/dashboard",
-      icon: LayoutDashboardIcon,
-    },
-
+    ...(role === "student"
+      ? [
+          {
+            title: "Mis cursos",
+            href: "/dashboard/courses",
+            icon: LayoutDashboardIcon,
+          },
+        ]
+      : []),
     ...(role === "instructor"
       ? [
+          {
+            title: "Mis cursos",
+            href: "/dashboard/",
+            icon: LayoutDashboardIcon,
+          },
           {
             title: "Crear curso",
             href: "/dashboard/course/create-course",
@@ -52,8 +57,9 @@ export function DashboardNav() {
             <li key={uuidv4()}>
               <Link
                 href={href}
-                className={`flex px-4 items-center gap-2 p-2  hover:bg-primary/20 transition-colors ${pathName === href ? "bg-primary/20 font-semibold" : ""
-                  } rounded-md m-2`}
+                className={`flex px-4 items-center gap-2 p-2  hover:bg-primary/20 transition-colors ${
+                  pathName === href ? "bg-primary/20 font-semibold" : ""
+                } rounded-md m-2`}
               >
                 {Icon && <Icon className="w-4 h-4" />}
                 <span>{title}</span>

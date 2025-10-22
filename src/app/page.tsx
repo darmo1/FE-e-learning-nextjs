@@ -1,4 +1,4 @@
-'use client'
+"use client";
 export const dynamic = "force-dynamic";
 
 import {
@@ -8,11 +8,10 @@ import {
 } from "./(core)/_components/home";
 import { redirect } from "next/navigation";
 import { useUser } from "./user-context";
+import { SectionCourses } from "./(core)/_components/home/section-courses";
 
 export default function Page() {
   const { isLogged, role } = useUser();
-  console.log("User role:", role, "Is logged in:", isLogged);
-
 
   if (isLogged && role === "admin") {
     return redirect("/admin");
@@ -26,12 +25,11 @@ export default function Page() {
   }
 
   return (
-        <main className="  mx-auto">
-          <SectionHero />
-          <SectionFeatures />
-          <SectionPricing />
-        </main>
-
-
+    <main className="  mx-auto">
+      <SectionHero />
+      <SectionCourses />
+      <SectionFeatures />
+      <SectionPricing />
+    </main>
   );
 }

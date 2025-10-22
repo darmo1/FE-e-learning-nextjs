@@ -166,3 +166,13 @@ export const getCoursesByInstructor = async () => {
 
   return response;
 };
+
+
+export const getAllCourses = async () => {
+  const { data: courses } = await requestHandler({
+    url: ENDPOINT.GET_ALL_COURSES,
+  });
+  return courses;
+
+  
+}
