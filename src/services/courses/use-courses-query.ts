@@ -6,7 +6,6 @@ export const useCoursesQuery = () => {
     queryKey: ["courses"],
     queryFn: async () => {
       try {
-        throw Error;
         const response = await fetch(ENDPOINT.GET_ALL_COURSES);
         if (!response.ok) {
           throw new Error("Network response was not ok");
