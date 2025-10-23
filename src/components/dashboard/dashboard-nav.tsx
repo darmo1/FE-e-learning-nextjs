@@ -23,7 +23,7 @@ export function DashboardNav() {
       ? [
           {
             title: "Mis cursos",
-            href: "/dashboard/courses",
+            href: "/dashboard/course",
             icon: LayoutDashboardIcon,
           },
         ]
