@@ -25,7 +25,7 @@ export default function Page() {
   }
 
   return (
-    <main className="  mx-auto">
+    <main className="mx-auto">
       <SectionHero />
       <SectionCourses />
       <SectionFeatures />

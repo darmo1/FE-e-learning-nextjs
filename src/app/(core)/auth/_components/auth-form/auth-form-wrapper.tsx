@@ -41,7 +41,6 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
         body: dataForm,
       });
 
-      debugger
       setFormError(false);
       if (data.success) {
         startTransition(async () => {
