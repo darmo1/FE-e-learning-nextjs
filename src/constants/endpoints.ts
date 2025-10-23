@@ -20,5 +20,5 @@ export const ENDPOINT = {
   REFRESH_TOKEN: `${HOST}${prefix}/auth/refresh`,
   ANALYTICS_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/courses`,
   ANALYTICS_SUMMARY_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/analytics/instructor/summary`,
-  GET_ALL_COURSES: `${HOST}${prefix}/course/all`,
+  GET_ALL_COURSES: `${CLIENT_HOST}${prefix}/course/all`,
 };
