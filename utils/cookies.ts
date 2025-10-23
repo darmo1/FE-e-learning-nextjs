@@ -7,11 +7,12 @@ export const setCookies = async (name: string, value: string) => {
   const _cookies = await cookies();
   return _cookies.set({
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     path: "/",
     sameSite: "lax",
     name,
     value,
+    maxAge: 60*60*2
   });
 };
 

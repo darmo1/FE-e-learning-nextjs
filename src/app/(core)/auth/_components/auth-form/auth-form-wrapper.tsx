@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, startTransition, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { defaultValuesLoginForm } from "./constants";
 import { CardFooter } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { requestHandler } from "../../../../../../utils/request-handler";
 import { ENDPOINT } from "@/constants/endpoints";
 import { useRouter } from "next/navigation";
+import { setCookies } from "../../../../../../utils/cookies";
 
 type AuthFormProps = {
   email: string;
@@ -37,7 +38,11 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
       console.log("Login successful:", data);
       setFormError(false);
       if(data.success){    
-        window.location.href = "/";
+        startTransition(async () => {
+          await setCookies('access_token', data.access_token)
+          window.location.href = "/";
+        })
+       
       }
 
     } catch (error) {
