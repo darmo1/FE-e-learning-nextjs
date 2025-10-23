@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const setCookies = async (name: string, value: string) => {
   "use server"
   const _cookies = await cookies();
-  return _cookies.set({
+  _cookies.set({
     httpOnly: true,
     secure: true,
     path: "/",

@@ -65,12 +65,13 @@ export function BreadcrumbMenu({ role }: { role: string | null }) {
                 <BreadcrumbLink asChild>
                   <Link href={item.normalizedPath}>{item.item}</Link>
                 </BreadcrumbLink>
-                <BreadcrumbSeparator />
+              
               </BreadcrumbItem>
             );
           }
           return;
         })}
+          <BreadcrumbSeparator />
       </BreadcrumbList>
     </Breadcrumb>
   );

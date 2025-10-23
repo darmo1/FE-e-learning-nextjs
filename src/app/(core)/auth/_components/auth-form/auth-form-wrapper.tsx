@@ -1,6 +1,12 @@
 "use client";
 
-import { FC, PropsWithChildren, startTransition, useEffect, useState } from "react";
+import {
+  FC,
+  PropsWithChildren,
+  startTransition,
+  useEffect,
+  useState,
+} from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { defaultValuesLoginForm } from "./constants";
 import { CardFooter } from "@/components/ui/card";
@@ -16,7 +22,7 @@ type AuthFormProps = {
   password: string;
 };
 export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
-  const router = useRouter()
+  const router = useRouter();
   const formMethods = useForm<AuthFormProps>({
     defaultValues: defaultValuesLoginForm,
   });
@@ -36,15 +42,15 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
       });
 
       console.log("Login successful:", data);
+      debugger
       setFormError(false);
-      if(data.success){    
+      if (data.success) {
         startTransition(async () => {
-          await setCookies('access_token', data.access_token)
+          await setCookies("access_token", data.access_token);
           window.location.href = "/";
-        })
-       
+        });
+        
       }
-
     } catch (error) {
       setFormError(true);
       console.error("Error during login:", error);
@@ -82,7 +88,13 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
                 </>
               )}
             </Button>
-            <Button type={"button"} variant="link" className="px-0 font-normal" size="sm" onClick={() => router.push('/forgot-password')}>
+            <Button
+              type={"button"}
+              variant="link"
+              className="px-0 font-normal"
+              size="sm"
+              onClick={() => router.push("/forgot-password")}
+            >
               Forgot password?
             </Button>
           </div>
