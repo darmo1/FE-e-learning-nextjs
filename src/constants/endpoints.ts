@@ -1,5 +1,5 @@
 const prefix = process.env.PREFIX || "/api/v1";
-const HOST = process.env.HOST_BACKEND || "http://localhost:3005";
+const HOST = process.env.HOST_BACKEND;
 
 export const ENDPOINT = {
   LOGIN: `${HOST}${prefix}/auth/login`,
