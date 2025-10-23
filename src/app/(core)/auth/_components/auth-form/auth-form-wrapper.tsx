@@ -41,7 +41,6 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
         body: dataForm,
       });
 
-      console.log("Login successful:", data);
       debugger
       setFormError(false);
       if (data.success) {
