@@ -34,7 +34,7 @@ export default async function StudentPage() {
           <CoursesCarousel
             title="My Courses"
             description="Expand your skills with our comprehensive selection of courses"
-            courses={courses}
+            courses={courses ?? []}
           />
         </Conditional>
 

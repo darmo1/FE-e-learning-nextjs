@@ -3,7 +3,7 @@ const HOST = process.env.HOST_BACKEND || "http://localhost:3005";
 const CLIENT_HOST = process.env.NEXT_PUBLIC_HOST_BACKEND || "http://localhost:3005"
 
 export const ENDPOINT = {
-  LOGIN: `${CLIENT_HOST}${prefix}/auth/login`,
+  LOGIN: `${HOST}${prefix}/auth/login`,
   GET_COURSES_BY_USER: `${HOST}${prefix}/course`,
   GET_COURSE_BY_COURSE_ID: `${HOST}${prefix}/course/{0}`,
   GET_COURSES_BY_INSTRUCTOR: `${HOST}${prefix}/course/instructor`,

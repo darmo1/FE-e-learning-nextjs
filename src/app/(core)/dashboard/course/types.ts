@@ -1,30 +1,14 @@
-export type CoursesProps = {
-  id?: string | number;
-  price: number;
-  title: string;
-  description: string;
-  category: string;
-};
+import type { Course, Lesson } from "@/services/courses/types";
+
+export type CoursesProps = Course;
+export type LessonsProps = Lesson;
+
 export type CourseProviderProps = {
   courses: CoursesProps[];
-  lessons: LessonsProps[]
+  lessons: LessonsProps[];
 };
-
-export type LessonsProps = {
-  title: string
-  is_free: boolean
-  id?: number,
-  course_id: number,
-  video_url?: string,
-  description?: string
-  created_at: Date
-  updated_at: Date,
-  position: number
-}
 
 export type CourseContextProps = {
   courses: CoursesProps[];
-  lessons: LessonsProps[]
+  lessons: LessonsProps[];
 };
-
-

@@ -4,88 +4,54 @@ import { requestHandler } from "../../../utils/request-handler";
 import { ResponseFetchUser, UserLoginProps } from "./types";
 import { setCookies } from "../../../utils/cookies";
 import { userRegisterSchema } from "./schemas";
-import { parse } from "cookie";
 import { cache } from "react";
 import { headerAccessTokenCookie } from "../../../utils/headers";
+import { ActionResult, actionFailure, actionSuccess } from "../types";
 
-export const userLogin = async (data: UserLoginProps) => {
+const GENERIC_LOGIN_ERROR =
+  "Error al iniciar sesión. Inténtalo de nuevo más tarde.";
+
+type LoginResponse = {
+  success: boolean;
+  message?: string;
+  access_token?: string;
+};
+
+export const loginAction = async (
+  credentials: UserLoginProps
+): Promise<ActionResult<null>> => {
   try {
     const response = await fetch(ENDPOINT.LOGIN, {
       method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: JSON.stringify(credentials),
+      headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (error) {
-        errorData = { message: "something went wrong", error };
-      }
+    const data: LoginResponse | null = await response.json().catch(() => null);
 
-      throw new Error(JSON.stringify(errorData));
+    if (!response.ok || !data?.success || !data.access_token) {
+      return actionFailure(data?.message ?? "Credenciales inválidas");
     }
 
-    const cookie = (response.headers as Headers).get("set-cookie");
-    if (cookie) {
-      const cookiesArray = cookie.split(/,(?=\s*\w+=)/); // separa por coma segura
-      const cookiesParsed = cookiesArray.map((cookieStr) =>
-        parse(cookieStr.trim())
-      );
-
-      // Combina todas las cookies en un solo objeto
-      const { access_token = "", refresh_token = "" } = Object.assign(
-        {},
-        ...cookiesParsed
-      );
-      await setCookies("access_token", access_token);
-      await setCookies("refresh_token", refresh_token);
-    }
-    const responseData = await response.json();
-    return {
-      success: true,
-      message: "Inicio de sesión exitoso",
-      data: responseData,
-    };
+    await setCookies("access_token", data.access_token);
+    return actionSuccess(null, data.message ?? "Inicio de sesión exitoso");
   } catch (error) {
-    const errorMessage = parseErrorMessage(error);
-    return { success: false, message: errorMessage, data: null };
+    console.error("Error during login:", error);
+    return actionFailure(GENERIC_LOGIN_ERROR, error);
   }
 };
 
-const parseErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) {
-    try {
-      const parsedError = JSON.parse(error.message);
-      if (parsedError && parsedError.message) {
-        return parsedError.message;
-      }
-
-      if (parsedError && parsedError.error) {
-        return parsedError.error;
-      }
-    } catch (parseError) {
-      console.error("Error al parsear el error:", parseError);
-    }
-    return "Error al iniciar sesión. Inténtalo de nuevo más tarde.";
-  }
-  return "Ocurrió un error inesperado.";
-};
-
-type responseType = {
+type RegisterState = {
   success: boolean;
   error: unknown;
   data: unknown;
   message: string;
 };
+
 export const userRegisterAction = async (
-  _prevState: responseType,
+  _prevState: RegisterState,
   formData: FormData
-) => {
-  const url = ENDPOINT.REGISTER;
+): Promise<RegisterState> => {
   const data = {
     fullName: formData.get("fullName") as string,
     email: formData.get("email") as string,
@@ -101,9 +67,10 @@ export const userRegisterAction = async (
       data: null,
     };
   }
+
   try {
     const { data: response } = await requestHandler({
-      url,
+      url: ENDPOINT.REGISTER,
       method: "POST",
       body: {
         full_name: data.fullName,
@@ -119,39 +86,32 @@ export const userRegisterAction = async (
       error: null,
     };
   } catch (error) {
- 
-    const errorMessage = parseErrorMessage(error);
-    console.log("Parsed error message:", errorMessage); 
-    return { success: false, message: errorMessage, data: null, error: error };
+    console.error("Error during register:", error);
+    const message =
+      error instanceof Error ? error.message : "Ocurrió un error inesperado.";
+    return { success: false, message, data: null, error: null };
   }
 };
 
-export const fetchUser = cache(
-  async (): Promise<{
-    data: ResponseFetchUser;
-    response: Response;
-  }> => {
-    try {
-   
-      const { data, response } = await requestHandler({
-        url: ENDPOINT.USER_INFO,
-      });
+export const fetchUser = cache(async () => {
+  return requestHandler<ResponseFetchUser>({
+    url: ENDPOINT.USER_INFO,
+  });
+});
 
+const ANONYMOUS_USER = {
+  role: "",
+  isLogged: false,
+  user: null,
+};
 
-      return {
-        data,
-        response: response,
-      };
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-);
-
+/**
+ * Variant of `fetchUser` that never throws or redirects — used in the root
+ * layout where an anonymous visitor is a valid state.
+ */
 export const safeFetchUser = async () => {
   try {
-    const authHeaders = (await headerAccessTokenCookie()) || {};
+    const authHeaders = (await headerAccessTokenCookie()) ?? {};
 
     const response = await fetch(ENDPOINT.USER_INFO, {
       method: "GET",
@@ -162,43 +122,14 @@ export const safeFetchUser = async () => {
       credentials: "include",
     });
 
-    if (response.status === 401) {
-      console.warn("fetchUserSafe: 401 Unauthorized");
-      return {
-        data: {
-          role: "",
-          isLogged: false,
-          user: null,
-        },
-        response: null,
-      };
-    }
-
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error en fetchUserSafe:", errorData);
-      return {
-        data: {
-          role: "",
-          isLogged: false,
-          user: null,
-        },
-        response: null,
-      };
+      return { data: ANONYMOUS_USER, response: null };
     }
 
     const data = await response.json();
     return { data, response };
   } catch (error) {
-    console.error("Error de red o fetchUserSafe general:", error);
-    return {
-      data: {
-        role: "",
-        isLogged: false,
-        user: null,
-      },
-      response: null,
-    };
+    console.error("Error fetching user:", error);
+    return { data: ANONYMOUS_USER, response: null };
   }
-}
-
+};

@@ -3,7 +3,7 @@ import { CoursesTable } from "./components/courses-table";
 import { getAnalyticsCoursesByInstructor } from "@/services/analytics/action";
 
 export default async function Page() {
-  const courseTable = (await getAnalyticsCoursesByInstructor()) || {};
+  const courseTable = (await getAnalyticsCoursesByInstructor()) ?? [];
 
   return (
     <main className="my-4">

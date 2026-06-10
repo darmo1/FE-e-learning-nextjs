@@ -1,27 +1,22 @@
-"use client";
-export const dynamic = "force-dynamic";
-
+import { redirect } from "next/navigation";
 import {
   SectionFeatures,
   SectionHero,
   SectionPricing,
 } from "./(core)/_components/home";
-import { redirect } from "next/navigation";
-import { useUser } from "./user-context";
 import { SectionCourses } from "./(core)/_components/home/section-courses";
+import { getCookie } from "../../utils/cookies";
+import { safeFetchUser } from "@/services/users/actions";
+import { ROUTES } from "@/constants/routes";
 
-export default function Page() {
-  const { isLogged, role } = useUser();
+export const dynamic = "force-dynamic";
 
-  if (isLogged && role === "admin") {
-    return redirect("/admin");
-  }
-  if (isLogged && role === "instructor") {
-    return redirect("/dashboard");
-  }
+export default async function Page() {
+  const token = await getCookie("access_token");
 
-  if (isLogged && role === "student") {
-    return redirect("/dashboard");
+  if (token) {
+    const { data } = await safeFetchUser();
+    if (data?.role) redirect(ROUTES.DASHBOARD);
   }
 
   return (

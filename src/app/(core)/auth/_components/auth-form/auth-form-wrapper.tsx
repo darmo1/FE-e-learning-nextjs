@@ -1,80 +1,53 @@
 "use client";
 
-import {
-  FC,
-  PropsWithChildren,
-  startTransition,
-  useEffect,
-  useState,
-} from "react";
+import { FC, PropsWithChildren, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { defaultValuesLoginForm } from "./constants";
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { requestHandler } from "../../../../../../utils/request-handler";
-import { ENDPOINT } from "@/constants/endpoints";
-import { useRouter } from "next/navigation";
-import { setCookies } from "../../../../../../utils/cookies";
+import { useRouter, useSearchParams } from "next/navigation";
+import { loginAction } from "@/services/users/actions";
+import { ROUTES } from "@/constants/routes";
 
 type AuthFormProps = {
   email: string;
   password: string;
 };
+
 export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const formMethods = useForm<AuthFormProps>({
     defaultValues: defaultValuesLoginForm,
   });
-  const { handleSubmit, watch } = formMethods;
-  const email = watch("email");
-  const password = watch("password");
-  const [formError, setFormError] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = formMethods;
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const onSubmit: SubmitHandler<AuthFormProps> = async (dataForm) => {
-    setIsPending(true);
-    try {
-      const { data } = await requestHandler({
-        url: ENDPOINT.LOGIN,
-        method: "POST",
-        body: dataForm,
-      });
+  const onSubmit: SubmitHandler<AuthFormProps> = async (credentials) => {
+    setFormError(null);
+    const result = await loginAction(credentials);
 
-      setFormError(false);
-      if (data.success) {
-        startTransition(async () => {
-          await setCookies("access_token", data.access_token);
-          window.location.href = "/";
-        });
-        
-      }
-    } catch (error) {
-      setFormError(true);
-      console.error("Error during login:", error);
-    } finally {
-      setIsPending(false);
+    if (!result.success) {
+      setFormError(result.message);
+      return;
     }
+
+    // Full reload so the root layout re-fetches the user with the new cookie.
+    window.location.href = searchParams.get("redirect") ?? ROUTES.HOME;
   };
-
-  useEffect(() => {
-    if (formError && (email || password)) {
-      setFormError(false);
-    }
-  }, [email, password, formError]);
 
   return (
     <FormProvider {...formMethods}>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {children}
         <CardFooter className="w-full">
-          <div className="flex flex-col  items-center justify-center min-w-1/2 w-full mx-auto my-4">
-            <Button
-              className="w-full"
-              disabled={isPending}
-              onClick={handleSubmit(onSubmit)}
-            >
-              {isPending ? (
+          <div className="flex flex-col items-center justify-center min-w-1/2 w-full mx-auto my-4">
+            <Button className="w-full" disabled={isSubmitting} type="submit">
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Logging in...
@@ -87,7 +60,7 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
               )}
             </Button>
             <Button
-              type={"button"}
+              type="button"
               variant="link"
               className="px-0 font-normal"
               size="sm"
@@ -98,7 +71,11 @@ export const AuthFormWrapper: FC<PropsWithChildren> = ({ children }) => {
           </div>
         </CardFooter>
       </form>
-      {formError && <div>Error en el formulario</div>}
+      {formError && (
+        <p className="text-center text-sm text-red-600" role="alert">
+          {formError}
+        </p>
+      )}
     </FormProvider>
   );
 };

@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAnalyticsSummaryCoursesByInstructor } from "@/services/analytics/action";
 
-type SummaryProps = { total_courses: number; total_students: number };
 export const SummaryBar = async () => {
-  const { total_courses, total_students }: SummaryProps =
-    (await getAnalyticsSummaryCoursesByInstructor()) || {};
+  const { total_courses, total_students } =
+    (await getAnalyticsSummaryCoursesByInstructor()) ?? {
+      total_courses: 0,
+      total_students: 0,
+    };
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card className="border-gray-200">

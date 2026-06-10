@@ -1,66 +1,38 @@
 "use server";
+
 import { ENDPOINT } from "@/constants/endpoints";
-import { AuthorizationHeaders } from "../../../utils/headers";
 import { requestHandler } from "../../../utils/request-handler";
+import { ActionResult, actionFailure, actionSuccess } from "../types";
+import { EnrollmentsCourses } from "@/app/(core)/home/_components/my-courses/types";
 
-export const EnrollCourseAction = async (courseId: number) => {
-  const headers = (await AuthorizationHeaders()) || {};
-  const body = {
-    course_id: courseId,
-  };
-
-
+export const EnrollCourseAction = async (
+  courseId: number
+): Promise<ActionResult<null>> => {
   try {
-    const { response } = await requestHandler({
+    await requestHandler({
       url: ENDPOINT.ENROLL_COURSE,
       method: "POST",
-      headers,
-      body,
+      body: { course_id: courseId },
     });
-    if (!response.ok) {
-      throw new Error("Error enrolling in the course");
-    }
 
-    return {
-      success: true,
-      message: "You have been enrolled in the course",
-      error: null,
-    };
+    return actionSuccess(null, "You have been enrolled in the course");
   } catch (error) {
     console.error("Error enrolling in the course:", error);
-    return {
-      success: false,
-      error,
-      message: "Error enrolling in the course",
-    };
+    return actionFailure("Error enrolling in the course", error);
   }
 };
 
-export const getCoursesEnrolled = async () => {
-  const headers = (await AuthorizationHeaders()) || {};
-
+export const getCoursesEnrolled = async (): Promise<
+  ActionResult<EnrollmentsCourses[]>
+> => {
   try {
-    const { data, response } = await requestHandler({
+    const { data } = await requestHandler<EnrollmentsCourses[]>({
       url: ENDPOINT.COURSES_ENROLLED,
-      headers,
     });
 
-    if (!response.ok) {
-      throw new Error("Error getting courses enrolled");
-    }
-    return {
-      success: true,
-      data,
-      message: "Get courses enrolled successfully",
-      error: null,
-    };
+    return actionSuccess(data ?? [], "Get courses enrolled successfully");
   } catch (error) {
     console.error("Error getting courses enrolled:", error);
-    return {
-      success: false,
-      error,
-      message: "Error getting courses enrolled",
-      data: [],
-    };
+    return actionFailure("Error getting courses enrolled", error);
   }
 };

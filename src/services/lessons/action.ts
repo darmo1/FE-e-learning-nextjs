@@ -1,132 +1,69 @@
 "use server";
-import { apiEndpoints, getApiUrl } from "@/constants/endpoints.api";
+
 import { requestHandler } from "../../../utils/request-handler";
 import { ENDPOINT } from "@/constants/endpoints";
 import { CreateLessonSchema, EditLessonSchema } from "./schemas";
 import { replaceTokenUrl } from "../../../utils/string";
 import { revalidatePath } from "next/cache";
+import { LessonsProps } from "@/app/(core)/dashboard/course/types";
+import { ActionResult, actionFailure, actionSuccess } from "../types";
 
+type UploadedVideo = { secure_url?: string };
+type LessonFields = Omit<CreateLessonSchema, "upload-video">;
 
-
-export const createLessonAction = async (
-  formData: CreateLessonSchema,
-  queryCourseId: number
-) => {
-  const { ["upload-video"]: uploadVideo, ...body } = formData;
-  const formVideo = new FormData();
-  formVideo.set("upload-video", uploadVideo);
-  try {
-    const res = await fetch(getApiUrl("/api/upload-video"), {
-      method: "POST",
-      body: formVideo,
-    });
-
-    if (res.ok) {
-      const responseVideo = await res.json();
-      return createDataLesson(body, responseVideo, queryCourseId);
-    }
-  } catch (err) {
-    return {
-      success: false,
-      message: "_error from upload video",
-      errors: err,
-    };
-  }
-};
-
-export const createDataLesson = async (_data, queryCourseId: number, video) => {
+export const createDataLesson = async (
+  data: LessonFields,
+  courseId: number,
+  video?: UploadedVideo
+): Promise<ActionResult<null>> => {
   try {
     await requestHandler({
       url: ENDPOINT.CREATE_LESSON,
       method: "POST",
-
       body: {
-        title: _data.title,
-        description: _data.description,
-        video_url: video?.secure_url || "",
+        title: data.title,
+        description: data.description,
+        video_url: video?.secure_url ?? "",
         is_free: false,
-        course_id: queryCourseId,
+        course_id: courseId,
       },
     });
 
     revalidatePath("/(core)/dashboard", "layout");
 
-    return {
-      success: true,
-      message: "_success All process",
-      errors: "",
-    };
+    return actionSuccess(null, "Clase creada exitosamente");
   } catch (error) {
-    console.log({ error });
-    return {
-      success: false,
-      message: "_error from save lesson",
-      errors: "",
-    };
+    console.error("Error creating lesson:", error);
+    return actionFailure("Error creating lesson", error);
   }
 };
 
-export const getLessonsByCourse = async (courseId: string) => {
-  const url = `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}`;
-  const { data: lessons} = await requestHandler({ url });
-
-  return lessons;
-};
-
-export const editLessonAction = async (
-  formData: Partial<EditLessonSchema>,
-  lessonId: number
-) => {
-  const { ["upload-video"]: uploadVideo, ...body } = formData;
-  if (uploadVideo) {
-    const formVideo = new FormData();
-    formVideo.set("upload-video", uploadVideo);
-    try {
-      const res = await fetch(apiEndpoints.UPLOAD_VIDEO, {
-        method: "POST",
-        body: formVideo,
-      });
-
-      if (res.ok) {
-        const responseVideo = await res.json();
-        return editLessonById(body, lessonId, responseVideo);
-      }
-    } catch (err) {
-      return {
-        success: false,
-        message: "_error from upload video",
-        errors: err,
-      };
-    }
-  } else {
-    return editLessonById(body, lessonId, undefined);
-  }
-};
-
-export const editLessonById = async (_data, lessonId: number, video) => {
+export const editLessonById = async (
+  data: Partial<Omit<EditLessonSchema, "upload-video">>,
+  lessonId: number,
+  video?: UploadedVideo
+): Promise<ActionResult<null>> => {
   try {
     await requestHandler({
       url: replaceTokenUrl(ENDPOINT.UPDATE_LESSON, lessonId),
       method: "PATCH",
-
       body: {
-        ...(_data.title && { title: _data.title }),
-        ...(_data?.description && { description: _data.description }),
+        ...(data.title && { title: data.title }),
+        ...(data.description && { description: data.description }),
         ...(video?.secure_url && { video_url: video.secure_url }),
       },
     });
 
-    return {
-      success: true,
-      message: "_success All process",
-      errors: "",
-    };
+    return actionSuccess(null, "Clase actualizada exitosamente");
   } catch (error) {
-    console.log({ error });
-    return {
-      success: false,
-      message: "_error from save lesson",
-      errors: "",
-    };
+    console.error("Error editing lesson:", error);
+    return actionFailure("Error editing lesson", error);
   }
+};
+
+export const getLessonsByCourse = async (courseId: string) => {
+  const { data: lessons } = await requestHandler<LessonsProps[]>({
+    url: `${ENDPOINT.GET_LESSONS_BY_COURSE}/${courseId}`,
+  });
+  return lessons;
 };

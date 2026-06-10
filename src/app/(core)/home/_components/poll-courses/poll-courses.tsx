@@ -1,16 +1,23 @@
-"use client";
-
-import { v4 as uuid } from "uuid";
 import { CoursesProps } from "./types";
-import { VerticalCard } from "@/components/common/vertical-card";
+import { CourseCard } from "@/components/common/course-card";
 
 export const PollCourses = (
   { courses }: { courses: CoursesProps[] } = { courses: [] }
 ) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+    <div className="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3">
       {courses.map((course) => (
-        <VerticalCard key={uuid()} {...course} href={course.href || "#"} />
+        <CourseCard key={course.id} href={course.href || "#"}>
+          <CourseCard.Image src={course.image_url} alt={course.title} />
+          <CourseCard.Content>
+            <CourseCard.Title>{course.title}</CourseCard.Title>
+            <CourseCard.Description>{course.description}</CourseCard.Description>
+            <CourseCard.Footer>
+              <CourseCard.Category>{course.category}</CourseCard.Category>
+              <CourseCard.Price price={course.price} />
+            </CourseCard.Footer>
+          </CourseCard.Content>
+        </CourseCard>
       ))}
     </div>
   );

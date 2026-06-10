@@ -9,7 +9,7 @@ export const forgotPasswordAction = async (
   }
 ): Promise<{ data: string; error: boolean; email?: string }> => {
   try {
-    const { data } = await requestHandler({
+    const { data } = await requestHandler<string>({
       url: "",
       headers: {},
     });
