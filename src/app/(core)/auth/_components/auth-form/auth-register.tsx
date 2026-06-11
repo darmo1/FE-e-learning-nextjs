@@ -13,9 +13,10 @@ export const AuthRegister = () => {
     <>
       <CardContent className="space-y-4">
         <InputField
-          label="Full Name"
+          label="Nombre completo"
           {...register("fullName")}
           placeholder="John Doe"
+          minLength={3}
           required
         />
         <InputField
@@ -28,13 +29,14 @@ export const AuthRegister = () => {
 
         <InputField
           type="password"
-          label="password"
+          label="Contraseña"
           {...register("password")}
-          placeholder="*****"
+          placeholder="Mínimo 8 caracteres"
+          minLength={8}
           required
         />
         <p className="text-xs text-muted-foreground">
-          Password must be at least 8 characters long
+          La contraseña debe tener al menos 8 caracteres
         </p>
       </CardContent>
       <CardFooter>

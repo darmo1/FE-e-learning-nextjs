@@ -42,14 +42,22 @@ export const AuthRegisterWrapper: FC<PropsWithChildren> = ({ children }) => {
         duration: 5000,
 
       })
-    } else if (!state.success && state.message && state.message !== "error form") {
-      toast.error(state.message, {
+    } else if (!state.success && state.message) {
+      // "error form" = validación zod del servidor; muestra el primer error de campo
+      let message = state.message;
+      if (message === "error form" && state.error && typeof state.error === "object") {
+        const fieldErrors = Object.values(
+          state.error as Record<string, string[]>
+        ).flat();
+        message = fieldErrors[0] ?? "Revisa los datos del formulario";
+      }
+      toast.error(message, {
         position: "top-center",
         closeButton: true,
         duration: 6000,
       });
     }
-  }, [state.success, state.message, formMethods]);
+  }, [state, formMethods]);
 
   return (
     <FormProvider {...formMethods}>
