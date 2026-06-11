@@ -7,6 +7,7 @@ import { Header } from "./(core)/_components/header";
 import { Footer } from "./(core)/_components/footer";
 import { Container } from "@/components/common/containter";
 import { BodyWrapper } from "@/components/common/body-wrapper";
+import { WarmBackend } from "@/components/common/warm-backend";
 import { Toaster } from "sonner";
 
 import QueryProvider from "@/providers/query-provider";
@@ -49,6 +50,7 @@ export default async function RootLayout({
       >
         <QueryProvider>
           <UserProvider {...userData}>
+            <WarmBackend />
             <Header />
 
             <Container className="grow">{children}</Container>
