@@ -1,9 +1,29 @@
 const prefix = process.env.PREFIX || "/api/v1";
+
+/** Quita espacios y slashes finales: "https://api.com/ " -> "https://api.com".
+ * Un slash final en la env var produce URLs "//api/v1/..." que el backend
+ * responde con 404. */
+const normalizeHost = (url?: string) => {
+  const clean = url?.trim().replace(/\/+$/, "");
+  return clean || undefined;
+};
+
+/** Último recurso si las env vars faltan o quedaron vacías en el hosting. */
+const FALLBACK_BACKEND =
+  process.env.NODE_ENV === "production"
+    ? "https://e-learning-fast-api.fastapicloud.dev"
+    : "http://localhost:3005";
+
 const HOST =
-  process.env.HOST_BACKEND ||
-  process.env.NEXT_PUBLIC_BACKEND_URL ||
-  "http://localhost:3005";
-const CLIENT_HOST = process.env.NEXT_PUBLIC_HOST_BACKEND || "http://localhost:3005"
+  normalizeHost(process.env.HOST_BACKEND) ??
+  normalizeHost(process.env.NEXT_PUBLIC_BACKEND_URL) ??
+  FALLBACK_BACKEND;
+
+const CLIENT_HOST =
+  normalizeHost(process.env.NEXT_PUBLIC_HOST_BACKEND) ?? FALLBACK_BACKEND;
+
+/** Base del backend para llamadas hechas desde el navegador. */
+export const CLIENT_BACKEND_HOST = CLIENT_HOST;
 
 export const ENDPOINT = {
   LOGIN: `${HOST}${prefix}/auth/login`,

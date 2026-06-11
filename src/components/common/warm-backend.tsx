@@ -1,9 +1,9 @@
 "use client";
 
+import { CLIENT_BACKEND_HOST } from "@/constants/endpoints";
 import { useEffect } from "react";
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_HOST_BACKEND ?? "http://localhost:3005";
+const BACKEND_URL = CLIENT_BACKEND_HOST;
 
 /**
  * Precalienta el backend y la base de datos serverless (Neon) apenas el
