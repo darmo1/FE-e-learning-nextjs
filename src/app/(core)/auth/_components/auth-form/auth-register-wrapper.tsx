@@ -40,8 +40,14 @@ export const AuthRegisterWrapper: FC<PropsWithChildren> = ({ children }) => {
         },
         closeButton: true,
         duration: 5000,
-        
+
       })
+    } else if (!state.success && state.message && state.message !== "error form") {
+      toast.error(state.message, {
+        position: "top-center",
+        closeButton: true,
+        duration: 6000,
+      });
     }
   }, [state.success, state.message, formMethods]);
 

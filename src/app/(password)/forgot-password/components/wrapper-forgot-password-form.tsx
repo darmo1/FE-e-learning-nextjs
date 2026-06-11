@@ -22,14 +22,16 @@ const schemaEmail = z.object({
 export const WrapperForgotPasswordForm: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const formMethods = useForm({
-    defaultValues: {
-      email: "",
-      resolver: zodResolver(schemaEmail),
-    },
+  const formMethods = useForm<z.infer<typeof schemaEmail>>({
+    defaultValues: { email: "" },
+    resolver: zodResolver(schemaEmail),
   });
 
-  const { register, handleSubmit } = formMethods;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = formMethods;
 
   const [state, formAction, isPending] = useActionState(forgotPasswordAction, {
     data: "",
@@ -71,9 +73,16 @@ export const WrapperForgotPasswordForm: FC<PropsWithChildren> = ({
         <label className="font-semibold">Correo</label>
         <input
           {...register("email")}
+          type="email"
+          autoComplete="email"
           className="bg-white/10 border border-gray-400   rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 backdrop-blur-md"
           placeholder="Email"
         />
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-400" role="alert">
+            El correo electrónico no es válido
+          </p>
+        )}
 
         <Button
           type="submit"
