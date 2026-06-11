@@ -1,6 +1,8 @@
-import { AuthWrapperSuscription, CtaStripe } from "./_components";
+import { AuthWrapperSuscription } from "./_components";
 import { AuthRegister } from "../../auth/_components/auth-form";
 import { SummaryPlan } from "./_components/summary-plan";
+import { CheckoutButton } from "@/components/payments/checkout-button";
+import type { CheckoutItemInput } from "@/services/payments/types";
 
 type SuscriptionProps = "basic" | "pro" | "custom";
 
@@ -56,13 +58,19 @@ export default async function CheckoutPage({
 
   const productToBuy = getProduct({ suscription });
 
+  const checkoutItem: CheckoutItemInput = {
+    productId: productToBuy.name,
+    title: `Plan ${productToBuy.name}`,
+    amount: productToBuy.total,
+  };
+
   return (
     <>
       <SummaryPlan {...productToBuy} />
-      <AuthWrapperSuscription product={productToBuy}>
+      <AuthWrapperSuscription item={checkoutItem}>
         <AuthRegister />
       </AuthWrapperSuscription>
-      <CtaStripe product={productToBuy} />
+      <CheckoutButton {...checkoutItem}>Continuar al pago</CheckoutButton>
     </>
   );
 }

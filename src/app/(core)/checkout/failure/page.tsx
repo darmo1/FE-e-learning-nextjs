@@ -3,9 +3,9 @@ import {
   toPaymentReturnParams,
   type RawSearchParams,
 } from "../_components/payment-params";
-import { ColorfulConfetti } from "./confetti-colorful";
+import { ROUTES } from "@/constants/routes";
 
-export default async function CheckoutSuccessPage({
+export default async function CheckoutFailurePage({
   searchParams,
 }: {
   searchParams: Promise<RawSearchParams>;
@@ -14,12 +14,12 @@ export default async function CheckoutSuccessPage({
 
   return (
     <PaymentStatusCard
-      variant="success"
-      title="¡Pago exitoso!"
-      description="Tu pago fue procesado correctamente. Ya tienes acceso a tu contenido."
+      variant="failure"
+      title="El pago no pudo completarse"
+      description="No se realizó ningún cargo. Puedes intentarlo de nuevo o usar otro medio de pago."
       details={details}
-    >
-      <ColorfulConfetti duration={4000} />
-    </PaymentStatusCard>
+      ctaHref={ROUTES.HOME}
+      ctaLabel="Intentar de nuevo"
+    />
   );
 }

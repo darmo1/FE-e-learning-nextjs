@@ -8,16 +8,18 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { FC, PropsWithChildren, useActionState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { getCheckoutSession } from "./utils";
+import { useCheckout } from "@/components/payments/use-checkout";
+import type { CheckoutItemInput } from "@/services/payments/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const AuthWrapperSuscription: FC<
   PropsWithChildren<{
-    product: { name: string; unitAmount: number };
+    item: CheckoutItemInput;
   }>
-> = ({ children, product }) => {
+> = ({ children, item }) => {
   const router = useRouter();
+  const { startCheckout, error: checkoutError } = useCheckout();
   const formMethods = useForm<AuthRegisterProps>({
     defaultValues: {
       fullName: "",
@@ -64,9 +66,15 @@ export const AuthWrapperSuscription: FC<
     }
 
     if (state.success && state.message) {
-      getCheckoutSession({ product });
+      startCheckout(item);
     }
-  }, [state.success, state.message, formMethods, state.error, product, router]);
+  }, [state.success, state.message, formMethods, state.error, item, router, startCheckout]);
+
+  useEffect(() => {
+    if (checkoutError) {
+      toast.error(checkoutError);
+    }
+  }, [checkoutError]);
 
   return (
     <FormProvider {...formMethods}>

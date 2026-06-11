@@ -15,7 +15,10 @@ type LoginResponse = {
   success: boolean;
   message?: string;
   access_token?: string;
+  refresh_token?: string;
 };
+
+const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 7; // 7 días, igual que el BE
 
 export const loginAction = async (
   credentials: UserLoginProps
@@ -34,6 +37,9 @@ export const loginAction = async (
     }
 
     await setCookies("access_token", data.access_token);
+    if (data.refresh_token) {
+      await setCookies("refresh_token", data.refresh_token, REFRESH_TOKEN_MAX_AGE);
+    }
     return actionSuccess(null, data.message ?? "Inicio de sesión exitoso");
   } catch (error) {
     console.error("Error during login:", error);
@@ -56,6 +62,7 @@ export const userRegisterAction = async (
     fullName: formData.get("fullName") as string,
     email: formData.get("email") as string,
     password: formData.get("password") as string,
+    inviteToken: (formData.get("inviteToken") as string) || undefined,
   };
 
   const { success, error } = userRegisterSchema.safeParse(data);
@@ -76,6 +83,7 @@ export const userRegisterAction = async (
         full_name: data.fullName,
         email: data.email,
         password: data.password,
+        invite_token: data.inviteToken ?? null,
       },
     });
 

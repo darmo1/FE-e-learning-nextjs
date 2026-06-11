@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 
-export const setCookies = async (name: string, value: string) => {
+export const setCookies = async (
+  name: string,
+  value: string,
+  maxAge: number = 60 * 60 * 2
+) => {
   "use server"
   const _cookies = await cookies();
   _cookies.set({
@@ -12,7 +16,7 @@ export const setCookies = async (name: string, value: string) => {
     sameSite: "lax",
     name,
     value,
-    maxAge: 60*60*2
+    maxAge,
   });
 };
 

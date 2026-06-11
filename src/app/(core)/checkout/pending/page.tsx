@@ -3,9 +3,8 @@ import {
   toPaymentReturnParams,
   type RawSearchParams,
 } from "../_components/payment-params";
-import { ColorfulConfetti } from "./confetti-colorful";
 
-export default async function CheckoutSuccessPage({
+export default async function CheckoutPendingPage({
   searchParams,
 }: {
   searchParams: Promise<RawSearchParams>;
@@ -14,12 +13,10 @@ export default async function CheckoutSuccessPage({
 
   return (
     <PaymentStatusCard
-      variant="success"
-      title="¡Pago exitoso!"
-      description="Tu pago fue procesado correctamente. Ya tienes acceso a tu contenido."
+      variant="pending"
+      title="Pago en proceso"
+      description="Tu pago está siendo procesado. Te notificaremos por correo cuando se acredite."
       details={details}
-    >
-      <ColorfulConfetti duration={4000} />
-    </PaymentStatusCard>
+    />
   );
 }

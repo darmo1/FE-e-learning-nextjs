@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import {
+  SectionEnterprise,
   SectionFeatures,
   SectionHero,
-  SectionPricing,
 } from "./(core)/_components/home";
 import { SectionCourses } from "./(core)/_components/home/section-courses";
 import { getCookie } from "../../utils/cookies";
@@ -24,7 +24,7 @@ export default async function Page() {
       <SectionHero />
       <SectionCourses />
       <SectionFeatures />
-      <SectionPricing />
+      <SectionEnterprise />
     </main>
   );
 }
