@@ -23,19 +23,20 @@ export default async function DashboardLayout({
 
   return (
     <UserProvider role={role} isLogged={isLogged} fullName={fullName}>
-      <div className="flex grow w-full flex-col md:flex-row bg-white">
-      
+      <div className="flex w-full grow flex-col bg-white md:flex-row">
         <DashboardNav />
-        <main className="flex-1 mx-8 my-4">
-            <BreadcrumbMenu role={role}/>
-          {role === "instructor" ? instructor : null}
-          {role === "admin" ? admin : null}
-          {role === "student" ? (
-            <>
-              {student}
-              {children}
-            </>
-          ) : null}
+        <main className="min-w-0 flex-1">
+          <div className="mx-auto w-full max-w-6xl px-6 py-8">
+            <BreadcrumbMenu role={role} />
+            {role === "instructor" ? instructor : null}
+            {role === "admin" ? admin : null}
+            {role === "student" ? (
+              <>
+                {student}
+                {children}
+              </>
+            ) : null}
+          </div>
         </main>
       </div>
     </UserProvider>

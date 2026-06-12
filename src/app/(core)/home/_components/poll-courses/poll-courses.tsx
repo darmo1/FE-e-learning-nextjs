@@ -5,7 +5,7 @@ export const PollCourses = (
   { courses }: { courses: CoursesProps[] } = { courses: [] }
 ) => {
   return (
-    <div className="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {courses.map((course) => (
         <CourseCard key={course.id} href={course.href || "#"}>
           <CourseCard.Image src={course.image_url} alt={course.title} />

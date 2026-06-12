@@ -19,19 +19,20 @@ export function CoursesCarousel({
   return (
     <section className="">
       <div className="container ">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight mb-2">{title}</h2>
-            {description && (
-              <p className="text-muted-foreground max-w-2xl">{description}</p>
-            )}
+        {(title || description) && (
+          <div className="mb-8 flex flex-col justify-between md:flex-row md:items-center">
+            <div>
+              {title && (
+                <h2 className="mb-2 text-3xl font-bold tracking-tight">
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className="max-w-2xl text-muted-foreground">{description}</p>
+              )}
+            </div>
           </div>
-          {/* <div className="flex items-center mt-4 md:mt-0">
-            <Button variant="outline" size="sm" className="mr-2">
-              View All
-            </Button>
-          </div> */}
-        </div>
+        )}
 
         <Carousel
           opts={{

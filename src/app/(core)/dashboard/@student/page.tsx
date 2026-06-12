@@ -1,15 +1,13 @@
 import React, { Suspense } from "react";
 import { getCoursesEnrolled } from "@/services/enrollments/action";
 import { HeadingUser } from "../_components/heading-user";
-import { Separator } from "@/components/ui/separator";
 import { getCookie } from "../../../../../utils/cookies";
 import { redirect } from "next/navigation";
-import { Container } from "@/components/common/containter";
 import { Conditional } from "@/components/common/conditional";
 import { EmptyCoursesCard } from "@/components/common/empty-courses-card";
 import { CoursesCarousel } from "../../home/_components/my-courses/courses-carousel";
-import { Heading } from "@/components/ui/heading";
 import { PollCoursesWrapper } from "../../home/_components/poll-courses/poll-courses-wrapper";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function StudentPage() {
   const token = await getCookie("access_token");
@@ -18,34 +16,56 @@ export default async function StudentPage() {
   if (!isLogged) return redirect("/");
   const { data: courses } = await getCoursesEnrolled();
   const showCarouselCourses = Boolean((courses || []).length);
+
   return (
-    <Container className="py-2">
+    <div className="flex flex-col gap-10">
       <HeadingUser />
-      <Suspense fallback={<div>Cargando...</div>}>
-        <Conditional
-          test={showCarouselCourses}
-          fallback={
-            <EmptyCoursesCard
-              title="No tienes cursos"
-              description="Puedes explorar la sección de cursos disponibles. Empieza ahora 👨‍💻"
+
+      <section>
+        <div className="mb-4 flex items-baseline justify-between">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-gray-900">
+              Mis cursos
+            </h2>
+            <p className="text-sm text-gray-500">
+              {showCarouselCourses
+                ? `${courses?.length} curso${(courses?.length ?? 0) > 1 ? "s" : ""} en progreso`
+                : "Aún no estás inscrito en ningún curso"}
+            </p>
+          </div>
+        </div>
+
+        <Suspense fallback={<Skeleton className="h-48 w-full rounded-lg" />}>
+          <Conditional
+            test={showCarouselCourses}
+            fallback={
+              <EmptyCoursesCard
+                title="No tienes cursos todavía"
+                description="Explora el catálogo y empieza a aprender hoy mismo."
+                action={{ label: "Explorar cursos", href: "/home" }}
+              />
+            }
+          >
+            <CoursesCarousel
+              title=""
+              description=""
+              courses={courses ?? []}
             />
-          }
-        >
-          <CoursesCarousel
-            title="My Courses"
-            description="Expand your skills with our comprehensive selection of courses"
-            courses={courses ?? []}
-          />
-        </Conditional>
+          </Conditional>
+        </Suspense>
+      </section>
 
-      </Suspense>
-      <Separator className="my-2" />
-      <Heading
-        title="Cursos que te pueden interesar"
-        description="Otros cursos"
-      />
-
-      <PollCoursesWrapper />
-    </Container>
+      <section className="border-t border-gray-200 pt-8">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
+            Te puede interesar
+          </h2>
+          <p className="text-sm text-gray-500">
+            Cursos seleccionados para seguir creciendo
+          </p>
+        </div>
+        <PollCoursesWrapper />
+      </section>
+    </div>
   );
 }

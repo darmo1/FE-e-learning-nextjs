@@ -35,7 +35,7 @@ const CourseCardRoot = ({
   const card = (
     <article
       className={cn(
-        "group flex h-full overflow-hidden rounded-xl bg-white shadow-lg transition duration-300 hover:shadow-2xl",
+        "group flex h-full overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-200 hover:border-gray-300 hover:shadow-sm",
         orientation === "vertical" ? "flex-col" : "flex-row",
         className
       )}
@@ -85,11 +85,11 @@ const CourseCardImage = ({
           src={src}
           alt={alt}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gray-200">
-          <span className="text-sm text-gray-500">Sin imagen</span>
+        <div className="flex h-full w-full items-center justify-center bg-gray-50">
+          <span className="text-sm text-gray-400">Sin imagen</span>
         </div>
       )}
       {children}
@@ -104,7 +104,7 @@ const CourseCardContent = ({
   className?: string;
   children: ReactNode;
 }) => (
-  <div className={cn("flex flex-1 flex-col gap-1 p-4", className)}>
+  <div className={cn("flex flex-1 flex-col gap-1.5 p-5", className)}>
     {children}
   </div>
 );
@@ -116,7 +116,14 @@ const CourseCardTitle = ({
   className?: string;
   children: ReactNode;
 }) => (
-  <h2 className={cn("truncate text-lg font-semibold", className)}>{children}</h2>
+  <h2
+    className={cn(
+      "truncate text-base font-semibold tracking-tight text-gray-900",
+      className
+    )}
+  >
+    {children}
+  </h2>
 );
 
 const CourseCardDescription = ({
@@ -126,7 +133,7 @@ const CourseCardDescription = ({
   className?: string;
   children: ReactNode;
 }) => (
-  <p className={cn("line-clamp-2 text-sm text-gray-600", className)}>
+  <p className={cn("line-clamp-2 text-sm leading-relaxed text-gray-500", className)}>
     {children}
   </p>
 );
@@ -139,19 +146,29 @@ const CourseCardFooter = ({
   children: ReactNode;
 }) => (
   <div
-    className={cn("mt-auto flex items-center justify-between pt-2", className)}
+    className={cn("mt-auto flex items-center justify-between pt-3", className)}
   >
     {children}
   </div>
 );
 
 const CourseCardCategory = ({ children }: { children: ReactNode }) => (
-  <span className="text-sm text-blue-500">{children}</span>
+  <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+    {children}
+  </span>
 );
 
 const CourseCardPrice = ({ price }: { price?: number }) => {
-  if (!price) return null;
-  return <span className="text-lg font-bold">${price}</span>;
+  if (!price) {
+    return (
+      <span className="text-sm font-medium text-emerald-600">Gratis</span>
+    );
+  }
+  return (
+    <span className="text-sm font-semibold tabular-nums text-gray-900">
+      ${price.toLocaleString("es-CO")}
+    </span>
+  );
 };
 
 /**

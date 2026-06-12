@@ -48,30 +48,33 @@ export function BreadcrumbMenu({ role }: { role: string | null }) {
   const breadcrumbMenu = getBreadcrumbMenu(role);
 
   return (
-    <Breadcrumb className="mb-4">
-      <BreadcrumbList>
+    <Breadcrumb className="mb-6">
+      <BreadcrumbList className="text-sm">
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <button onClick={() => router.back()} className="flex items-center">
-              <ArrowLeft className="w-3 h-3 mx-1" /> Volver
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-1 text-gray-500 transition-colors hover:text-gray-900"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" /> Volver
             </button>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        {breadcrumbMenu.map((item) => {
-          if (item.isActive) {
-            return (
-              <BreadcrumbItem key={item.normalizedPath}>
-                <BreadcrumbLink asChild>
-                  <Link href={item.normalizedPath}>{item.item}</Link>
-                </BreadcrumbLink>
-              
-              </BreadcrumbItem>
-            );
-          }
-          return;
-        })}
-          <BreadcrumbSeparator />
+        {breadcrumbMenu
+          .filter((item) => item.isActive)
+          .map((item) => (
+            <BreadcrumbItem key={item.normalizedPath} className="flex items-center gap-1.5">
+              <BreadcrumbSeparator />
+              <BreadcrumbLink asChild>
+                <Link
+                  href={item.normalizedPath}
+                  className="font-medium text-gray-900"
+                >
+                  {item.item}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          ))}
       </BreadcrumbList>
     </Breadcrumb>
   );
