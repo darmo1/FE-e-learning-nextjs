@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { InputField } from "@/components/common/input-field";
 import { resetPasswordAction } from "@/services/password/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { FC, startTransition, useActionState } from "react";
 import { useForm } from "react-hook-form";
@@ -47,12 +48,12 @@ export const WrapperResetPasswordForm: FC<WrapperResetPasswordFormProps> = ({
 
   if (!token) {
     return (
-      <div className="mx-auto w-full max-w-md rounded-md border border-white/20 p-6 text-center backdrop-blur-md">
-        <p className="mb-4">
+      <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white p-8 text-center">
+        <p className="text-sm text-gray-500">
           El enlace está incompleto. Solicita uno nuevo desde la página de
           recuperación.
         </p>
-        <Button asChild>
+        <Button asChild size="sm" className="mt-2">
           <Link href="/forgot-password">Recuperar contraseña</Link>
         </Button>
       </div>
@@ -61,9 +62,13 @@ export const WrapperResetPasswordForm: FC<WrapperResetPasswordFormProps> = ({
 
   if (state.done && state.success) {
     return (
-      <div className="mx-auto w-full max-w-md rounded-md border border-white/20 p-6 text-center backdrop-blur-md">
-        <p className="mb-4">✅ {state.message}</p>
-        <Button asChild>
+      <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white p-8 text-center">
+        <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+        <h2 className="text-sm font-semibold text-gray-900">
+          Contraseña actualizada
+        </h2>
+        <p className="text-sm text-gray-500">{state.message}</p>
+        <Button asChild size="sm" className="mt-2">
           <Link href="/auth">Iniciar sesión</Link>
         </Button>
       </div>
@@ -71,67 +76,51 @@ export const WrapperResetPasswordForm: FC<WrapperResetPasswordFormProps> = ({
   }
 
   const onSubmit = (data: FormValues) => {
-    startTransition(() =>
-      formAction({ token, newPassword: data.newPassword })
-    );
+    startTransition(() => formAction({ token, newPassword: data.newPassword }));
   };
-
-  const inputClass =
-    "bg-white/10 border border-gray-400 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 backdrop-blur-md";
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto flex w-full max-w-md flex-col gap-3 rounded-md border border-white/20 p-4 shadow-xl backdrop-blur-md"
+      className="mx-auto flex w-full max-w-sm flex-col gap-5"
     >
-      <label className="font-semibold" htmlFor="newPassword">
-        Nueva contraseña
-      </label>
-      <input
+      <InputField
+        label="Nueva contraseña"
         id="newPassword"
         type="password"
         autoComplete="new-password"
         placeholder="Mínimo 8 caracteres"
-        className={inputClass}
+        errorMessage={errors.newPassword?.message}
         {...register("newPassword")}
       />
-      {errors.newPassword && (
-        <p className="text-sm text-red-400" role="alert">
-          {errors.newPassword.message}
-        </p>
-      )}
 
-      <label className="font-semibold" htmlFor="confirmPassword">
-        Confirma la contraseña
-      </label>
-      <input
+      <InputField
+        label="Confirma la contraseña"
         id="confirmPassword"
         type="password"
         autoComplete="new-password"
         placeholder="Repítela"
-        className={inputClass}
+        errorMessage={errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
-      {errors.confirmPassword && (
-        <p className="text-sm text-red-400" role="alert">
-          {errors.confirmPassword.message}
-        </p>
-      )}
 
       {state.done && !state.success && (
-        <p className="text-sm text-red-400" role="alert">
+        <p
+          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600"
+          role="alert"
+        >
           {state.message}{" "}
-          <Link href="/forgot-password" className="underline">
+          <Link href="/forgot-password" className="underline underline-offset-2">
             Solicitar un enlace nuevo
           </Link>
         </p>
       )}
 
-      <Button type="submit" disabled={isPending} className="my-2">
+      <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? (
           <>
-            Guardando
-            <LoaderCircle className="ms-2 h-4 w-4 animate-spin" />
+            <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+            Guardando...
           </>
         ) : (
           "Cambiar contraseña"

@@ -1,18 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { InputField } from "@/components/common/input-field";
 import { forgotPasswordAction } from "@/services/password/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
+import Link from "next/link";
 import React, {
   FC,
   PropsWithChildren,
   startTransition,
   useActionState,
-  useEffect,
 } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
 
 const schemaEmail = z.object({
@@ -42,60 +42,70 @@ export const WrapperForgotPasswordForm: FC<PropsWithChildren> = ({
     startTransition(() => formAction({ email: data.email }));
   };
 
-  useEffect(() => {
-    if (!state.error) {
-      toast.success(
-        `Hemos enviado un correo electrónico 📧 a la dirección ${state?.email}, revisa para resetear tu contraseña`,
-        {
-          position: "top-center",
-          duration: Infinity,
-          action: {
-            label: "cerrar",
-            onClick: () => toast.dismiss(),
-          },
-          description: () => <div>Revisalo 🎉</div>,
-        }
-      );
-    } else if (state.error && state.data) {
-      toast.warning("Algo salió mal, intentalo mas tarde 💥");
-    }
-  }, [state]);
+  if (!state.error && state.email) {
+    return (
+      <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white p-8 text-center">
+        <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+        <h2 className="text-sm font-semibold text-gray-900">
+          Revisa tu correo
+        </h2>
+        <p className="text-sm text-gray-500">
+          Si <span className="font-medium text-gray-900">{state.email}</span>{" "}
+          está registrado, te enviamos un enlace para restablecer tu contraseña
+          (válido por 30 minutos).
+        </p>
+        <Button asChild variant="outline" size="sm" className="mt-2">
+          <Link href="/auth">Volver a iniciar sesión</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...formMethods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-1/3 flex flex-col 
-        order border-white/20 
-        backdrop-blur-md shadow-xl p-4 rounded-md mx-auto" 
+        className="mx-auto flex w-full max-w-sm flex-col gap-5"
       >
         {children}
-        <label className="font-semibold">Correo</label>
-        <input
-          {...register("email")}
+
+        <InputField
+          label="Email"
           type="email"
           autoComplete="email"
-          className="bg-white/10 border border-gray-400   rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/40 backdrop-blur-md"
-          placeholder="Email"
+          placeholder="nombre@ejemplo.com"
+          errorMessage={
+            errors.email ? "El correo electrónico no es válido" : undefined
+          }
+          {...register("email")}
         />
-        {errors.email && (
-          <p className="mt-1 text-sm text-red-400" role="alert">
-            El correo electrónico no es válido
+
+        {state.error && state.data && (
+          <p
+            className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600"
+            role="alert"
+          >
+            {state.data}
           </p>
         )}
 
-        <Button
-          type="submit"
-          variant={"default"}
-          className={`${isPending ? "bg-black/70" : ""} my-3`}
-        >
-          Enviar{" "}
+        <Button type="submit" disabled={isPending} className="w-full">
           {isPending ? (
-            <LoaderCircle className="w-4 h-4 text-white ms-2 animate-spin" />
+            <>
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              Enviando...
+            </>
           ) : (
-            <div className="w-4 h-4 not-first:ms-2" />
+            "Enviar enlace de recuperación"
           )}
         </Button>
+
+        <Link
+          href="/auth"
+          className="mx-auto text-sm text-gray-500 transition-colors hover:text-gray-900"
+        >
+          Volver a iniciar sesión
+        </Link>
       </form>
     </FormProvider>
   );
