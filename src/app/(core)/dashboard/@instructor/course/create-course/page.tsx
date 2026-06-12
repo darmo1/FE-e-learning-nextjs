@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic";
 
-import { Heading } from "@/components/ui/heading";
 import { CourseContextProvider } from "./create-course.context";
 import {
   CreateCourseForm,
@@ -40,7 +39,16 @@ async function Page({
 
   return (
     <CourseContextProvider>
-      <Heading title="Cursos " description="Your personal dashboard" />
+      <header className="pb-6">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          {courseId ? "Editar curso" : "Crear curso"}
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          {courseId
+            ? "Actualiza la información y las lecciones de tu curso"
+            : "Completa la información y luego agrega las lecciones"}
+        </p>
+      </header>
       <NavigationStepsForm />
       <CreateCourseFormWrapper course={courseDataForm}>
         <CreateCourseForm />

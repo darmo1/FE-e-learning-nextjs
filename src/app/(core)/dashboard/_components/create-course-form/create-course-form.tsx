@@ -6,7 +6,7 @@ import { CATEGORY, COURSE_TITLE, DESCRIPTION_COURSE, PRICE } from "./constant";
 
 import { Conditional } from "@/components/common/conditional";
 import Image from "next/image";
-import { Upload } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 
 export const CreateCourseForm = () => {
   const {
@@ -19,7 +19,9 @@ export const CreateCourseForm = () => {
   } = useFormContext();
 
   const inputImage = watch("previewMode");
-  const [selectedImage, setSelectedImage] = useState<string | null>(inputImage || "");
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    inputImage || ""
+  );
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -41,10 +43,10 @@ export const CreateCourseForm = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex max-w-2xl flex-col gap-5">
       <InputField
         label={COURSE_TITLE}
-        placeholder="Enter course"
+        placeholder="Ej. Introducción a React"
         {...register("title")}
         errorMessage={
           errors?.title?.message ? String(errors?.title?.message) : ""
@@ -55,8 +57,7 @@ export const CreateCourseForm = () => {
       <InputField
         label={DESCRIPTION_COURSE}
         {...register("description")}
-        className="min-h-28 flex justify-items-start items-start"
-        placeholder="Enter your description"
+        placeholder="¿Qué van a aprender tus estudiantes?"
         errorMessage={
           errors?.description?.message
             ? String(errors?.description?.message)
@@ -64,72 +65,82 @@ export const CreateCourseForm = () => {
         }
         required
       />
-      <InputField
-        label={CATEGORY}
-        {...register("category")}
-        placeholder="Enter your description"
-        errorMessage={
-          errors?.category?.message ? String(errors?.category?.message) : ""
-        }
-        required
-      />
-      <InputField
-        label={PRICE}
-        type="number"
-        {...register("price", { valueAsNumber: true })}
-        errorMessage={
-          errors?.price?.message ? String(errors?.price?.message) : ""
-        }
-        placeholder="Enter your description"
-        required
-      />
 
-      <div
-        className={` ${
-          selectedImage ? "" : "border border-gray-300"
-        } rounded-md relative px-2 py-1 my-4`}
-      >
+      <div className="grid gap-5 sm:grid-cols-2">
+        <InputField
+          label={CATEGORY}
+          {...register("category")}
+          placeholder="Ej. Desarrollo web"
+          errorMessage={
+            errors?.category?.message ? String(errors?.category?.message) : ""
+          }
+          required
+        />
+        <InputField
+          label={PRICE}
+          type="number"
+          {...register("price", { valueAsNumber: true })}
+          errorMessage={
+            errors?.price?.message ? String(errors?.price?.message) : ""
+          }
+          placeholder="0 = curso gratuito"
+          required
+        />
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="text-sm font-medium text-gray-900">
+          Imagen de portada<span className="ml-0.5 text-gray-400">*</span>
+        </span>
+
         <Conditional test={!!selectedImage}>
-          <div className="relative md:max-w-[200px]">
-            <label className="text-sm font-medium text-gray-700">Image</label>
+          <div className="relative w-fit overflow-hidden rounded-lg border border-gray-200">
             <Image
               src={selectedImage!}
-              alt="Preview"
-              width={240}
-              height={135}
+              alt="Vista previa de la portada"
+              width={320}
+              height={180}
+              className="aspect-video object-cover"
             />
             <button
               type="button"
               onClick={removeImage}
-              className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+              aria-label="Quitar imagen"
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur transition-colors hover:bg-black/80"
             >
-              ✕
+              <X className="h-4 w-4" />
             </button>
           </div>
         </Conditional>
 
-        <div className="gap-2">
-          <Conditional test={!selectedImage}>
-            <label>Image</label>
-            <div className="flex justify-center items-center">
-              <Upload className="w-5 h-5 " />
+        <Conditional test={!selectedImage}>
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300 px-6 py-10 text-center transition-colors hover:border-gray-400 hover:bg-gray-50">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white">
+              <ImagePlus className="h-5 w-5 text-gray-400" />
+            </span>
+            <span className="text-sm font-medium text-gray-900">
+              Sube la portada del curso
+            </span>
+            <span className="text-xs text-gray-500">
+              PNG o JPG, idealmente 1280×720
+            </span>
+            <input
+              {...register("image", {
+                onChange: handleImageChange,
+              })}
+              className="sr-only"
+              type="file"
+              accept="image/*"
+              required
+            />
+          </label>
+        </Conditional>
 
-              <input
-                {...register("image", {
-                  onChange: handleImageChange,
-                })}
-                className="ml-4 cursor-pointer file:rounded file:border file:px-4 file:py-2 file:bg-blue-500 file:text-white"
-                type="file"
-                placeholder="Upload image"
-                accept="image/*"
-                required
-              />
-            </div>
-          </Conditional>
-        </div>
-        <div className="font-semibold text-red-500">
-          {errors?.image?.message ? String(errors?.image?.message) : ""}
-        </div>
+        {errors?.image?.message && (
+          <p className="text-sm text-red-600" role="alert">
+            {String(errors.image.message)}
+          </p>
+        )}
       </div>
     </div>
   );

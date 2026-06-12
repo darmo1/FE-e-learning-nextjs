@@ -16,6 +16,7 @@ import { CreateCourseFormWrapperProps } from "./types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ArrowRight, LoaderCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const CreateCourseFormWrapper: FC<
   PropsWithChildren<{
@@ -74,24 +75,26 @@ export const CreateCourseFormWrapper: FC<
   return (
     <Conditional test={currentStep === 1}>
       <FormProvider {...formMethods}>
-        <form onSubmit={handleSubmit(_onSubmit)}>
+        <form
+          onSubmit={handleSubmit(_onSubmit)}
+          className="flex flex-col gap-6"
+        >
           {children}
 
-          <div
-            className={`${
-              isPending ? "bg-black/75" : "bg-black"
-            } border text-white flex px-4 py-2 rounded-md w-fit  ms-auto me-0 items-center `}
-          >
-            <input
-              type="submit"
-              value={
-                isEditPage
-                  ? "Editar curso"
-                  : "Create Course & Continue to Lessons"
-              }
-              disabled={isPending}
-            />
-            {isPending ? <LoaderCircle  className="w-4 h-4 text-white ms-2 animate-spin" /> : <ArrowRight className="w-4 h-4 text-white ms-2" />  }
+          <div className="flex max-w-2xl justify-end border-t border-gray-200 pt-5">
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                  Guardando...
+                </>
+              ) : (
+                <>
+                  {isEditPage ? "Guardar cambios" : "Crear curso y continuar"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
           </div>
         </form>
       </FormProvider>

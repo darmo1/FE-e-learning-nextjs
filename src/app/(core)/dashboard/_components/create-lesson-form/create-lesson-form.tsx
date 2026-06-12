@@ -11,15 +11,13 @@ export const CreateLessonForm = () => {
     formState: { errors },
   } = useFormContext();
   return (
-    <div>
+    <div className="flex max-w-2xl flex-col gap-5">
       <InputField
         label={TITLE_LESSON}
         {...register("title")}
-        placeholder="Enter your description"
+        placeholder="Ej. Configurando el entorno"
         errorMessage={
-          errors?.title?.message
-            ? String(errors?.description?.message)
-            : ""
+          errors?.title?.message ? String(errors?.title?.message) : ""
         }
         required
       />
@@ -27,8 +25,7 @@ export const CreateLessonForm = () => {
       <InputField
         label={DESCRIPTION_LESSON}
         {...register("description")}
-        className="min-h-28 flex justify-items-start items-start"
-        placeholder="Enter your description"
+        placeholder="¿De qué trata esta lección?"
         errorMessage={
           errors?.description?.message
             ? String(errors?.description?.message)

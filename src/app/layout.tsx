@@ -54,7 +54,8 @@ export default async function RootLayout({
             <Header />
 
             <Container className="grow">{children}</Container>
-            <Footer />
+            {/* Footer solo para visitantes: los usuarios autenticados ven la app */}
+            {!userData.isLogged && <Footer />}
             <Toaster />
           </UserProvider>
         </QueryProvider>
