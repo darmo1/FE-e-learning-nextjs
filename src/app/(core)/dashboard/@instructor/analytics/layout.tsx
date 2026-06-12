@@ -1,4 +1,3 @@
-import HighlightedHeading from "@/components/common/highlighted-heading";
 import React from "react";
 
 export default function AnalyticsLayout({
@@ -12,18 +11,26 @@ export default function AnalyticsLayout({
   summary: React.ReactNode;
 }) {
   return (
-    <div>
-      <div className="flex flex-col gap-4 w-full">
-        <HighlightedHeading
-          highlight="Analitica de cursos"
-          highlightClassName="before:bg-amber-500/30"
-        />
-        {summary}
+    <div className="flex flex-col gap-8">
+      <header>
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Analítica
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Rendimiento de tus cursos y estudiantes
+        </p>
+      </header>
 
-        <div>{coursesTable}</div>
+      {summary}
 
-        {children}
-      </div>
+      <section>
+        <h2 className="mb-4 text-lg font-semibold tracking-tight text-gray-900">
+          Cursos
+        </h2>
+        {coursesTable}
+      </section>
+
+      {children}
     </div>
   );
 }

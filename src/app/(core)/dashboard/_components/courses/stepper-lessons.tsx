@@ -1,10 +1,9 @@
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
-import React from "react";
+"use client";
 
-import { v4 as uuid } from "uuid";
-import { Conditional } from "@/components/common/conditional";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 import { LessonsProps } from "../../course/types";
 
 export const StepperLessons = ({
@@ -12,48 +11,40 @@ export const StepperLessons = ({
 }: {
   lessons: LessonsProps[];
 }) => {
-  return (
-    <div className="w-full space-y-0 relative">
-      {/* {/* Vertical line connecting steps */}
-      <div className="absolute left-3 top-8 bottom-8 w-0.5 bg-muted" />
+  const searchParams = useSearchParams();
+  const currentLessonId =
+    Number(searchParams.get("lesson")) || lessons[0]?.id || 0;
 
-      {lessons.map(({ course_id, id:lessonId,  title, }) => (
-        <div
-          key={uuid()}
-          className="relative flex items-center py-3 cursor-pointer"
-          onClick={() => {}}
-        >
-          <div
-            className={cn(
-              "flex items-center justify-center w-6 h-6 rounded-full border-2 z-10",
-              false
-                ? "bg-primary text-primary-foreground border-primary"
-                : false
-                ? "bg-primary/20 border-primary/50"
-                : "bg-background border-muted"
-            )}
-          >
-            <Conditional
-              test={false}
-              fallback={<span className="text-lg font-medium">{lessonId} </span>}
+  return (
+    <ol className="flex flex-col gap-1">
+      {lessons.map(({ course_id, id: lessonId, title }, index) => {
+        const isActive = lessonId === currentLessonId;
+        return (
+          <li key={lessonId}>
+            <Link
+              href={`/dashboard/course/${course_id}?lesson=${lessonId}`}
+              className={cn(
+                "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
+                isActive
+                  ? "bg-gray-100 font-medium text-gray-900"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              )}
             >
-              <Check className="h-6 w-6" />
-            </Conditional>
-          </div>
-          <Link href={`/dashboard/course/${course_id}?lesson=${lessonId}`}>
-          <div
-            className={cn(
-              "ml-4 font-medium",
-              false ? "text-foreground" : "text-muted-foreground  bg-blue-100"
-            )}
-          >
-            {title}
-          </div>
-          
-          </Link>
-         
-        </div>
-      ))}
-    </div>
+              <span
+                className={cn(
+                  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums",
+                  isActive
+                    ? "border-gray-900 bg-gray-900 text-white"
+                    : "border-gray-300 text-gray-500"
+                )}
+              >
+                {index + 1}
+              </span>
+              <span className="truncate">{title}</span>
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
   );
 };
