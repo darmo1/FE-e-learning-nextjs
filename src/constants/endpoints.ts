@@ -36,6 +36,7 @@ export const ENDPOINT = {
   UPDATE_LESSON: `${HOST}${prefix}/lessons/edit/{0}`,
   GET_LESSONS_BY_COURSE: `${HOST}${prefix}/lessons`,
   REGISTER: `${HOST}${prefix}/auth/register`,
+  RESEND_ACTIVATION: `${HOST}${prefix}/auth/resend-activation`,
   FORGOT_PASSWORD: `${HOST}${prefix}/auth/forgot-password`,
   RESET_PASSWORD: `${HOST}${prefix}/auth/reset-password`,
   ENROLL_COURSE: `${HOST}${prefix}/enrollments`,

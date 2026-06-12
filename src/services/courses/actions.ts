@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_rethrow } from "next/navigation";
 import { CreateCourseProps } from "./schemas";
 import { ENDPOINT } from "@/constants/endpoints";
 import { requestHandler } from "../../../utils/request-handler";
@@ -26,6 +27,9 @@ export const createCourseAction = async (
 
     return actionSuccess(course, "Curso creado exitosamente");
   } catch (error) {
+    // Los redirects de Next (p. ej. 401 -> /auth/refresh) viajan como
+    // excepciones: hay que relanzarlos o el refresh de sesión nunca ocurre.
+    unstable_rethrow(error);
     console.error("Error creating course:", error);
     return actionFailure("Error creating course", error);
   }
@@ -50,6 +54,7 @@ export const editCourseAction = async (
 
     return actionSuccess(course, "Curso actualizado exitosamente");
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Error editing course:", error);
     return actionFailure("Error editing course", error);
   }

@@ -92,7 +92,7 @@ export function VideoUploader() {
         <p className="mt-2 text-sm text-muted-foreground">
           Vista previa del video cargado
         </p>
-        <button onClick={() => setValue("upload-video", undefined)}>
+        <button type="button" onClick={() => setValue("upload-video", undefined)}>
           Cambiar video
         </button>
       </div>
@@ -182,6 +182,7 @@ export function VideoUploader() {
         </Button>
 
         <Button
+          type="button"
           variant="secondary"
           size="sm"
           disabled={isUploading}

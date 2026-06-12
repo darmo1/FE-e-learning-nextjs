@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_rethrow } from "next/navigation";
 import { requestHandler } from "../../../utils/request-handler";
 import { ENDPOINT } from "@/constants/endpoints";
 import { CreateLessonSchema, EditLessonSchema } from "./schemas";
@@ -33,6 +34,8 @@ export const createDataLesson = async (
 
     return actionSuccess(null, "Clase creada exitosamente");
   } catch (error) {
+    // Relanza los redirects de Next (401 -> /auth/refresh) en vez de tragarlos
+    unstable_rethrow(error);
     console.error("Error creating lesson:", error);
     return actionFailure("Error creating lesson", error);
   }
@@ -56,6 +59,7 @@ export const editLessonById = async (
 
     return actionSuccess(null, "Clase actualizada exitosamente");
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Error editing lesson:", error);
     return actionFailure("Error editing lesson", error);
   }

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { ENDPOINT } from "@/constants/endpoints";
 import { requestHandler } from "../../../utils/request-handler";
 import { ActionResult, actionFailure, actionSuccess } from "../types";
@@ -42,6 +43,7 @@ export const createCompanyAction = async (
     return actionSuccess(data, "Empresa creada");
   } catch (error) {
     console.error("Error creating company:", error);
+    unstable_rethrow(error);
     return actionFailure(
       error instanceof Error ? error.message : "No se pudo crear la empresa",
       error
@@ -63,6 +65,7 @@ export const updateCompanyAction = async (
     return actionSuccess(data, "Empresa actualizada");
   } catch (error) {
     console.error("Error updating company:", error);
+    unstable_rethrow(error);
     return actionFailure(
       error instanceof Error ? error.message : "No se pudo actualizar la empresa",
       error
@@ -82,6 +85,7 @@ export const regenerateInviteTokenAction = async (
     return actionSuccess(data, "Link de invitación regenerado");
   } catch (error) {
     console.error("Error regenerating invite token:", error);
+    unstable_rethrow(error);
     return actionFailure("No se pudo regenerar el link", error);
   }
 };
@@ -106,6 +110,7 @@ export const setCompanyCourseAction = async (
     return actionSuccess(null, enabled ? "Curso habilitado" : "Curso deshabilitado");
   } catch (error) {
     console.error("Error toggling company course:", error);
+    unstable_rethrow(error);
     return actionFailure("No se pudo actualizar el curso", error);
   }
 };

@@ -1,4 +1,5 @@
 "use server";
+import { unstable_rethrow } from "next/navigation";
 import { ENDPOINT } from "@/constants/endpoints";
 import { requestHandler } from "../../../utils/request-handler";
 import { ResponseFetchUser, UserLoginProps } from "./types";
@@ -106,6 +107,24 @@ export const fetchUser = cache(async () => {
     url: ENDPOINT.USER_INFO,
   });
 });
+
+/** Reenvía el correo de activación al usuario autenticado (cuenta inactiva). */
+export const resendActivationAction = async (): Promise<ActionResult<null>> => {
+  try {
+    const { data } = await requestHandler<{ message?: string }>({
+      url: ENDPOINT.RESEND_ACTIVATION,
+      method: "POST",
+    });
+    return actionSuccess(null, data?.message ?? "Correo de activación enviado");
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("Error resending activation email:", error);
+    return actionFailure(
+      error instanceof Error ? error.message : "No se pudo enviar el correo",
+      error
+    );
+  }
+};
 
 const ANONYMOUS_USER = {
   role: "",

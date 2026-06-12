@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { AccountInactiveNotice } from "@/components/dashboard/account-inactive-notice";
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { fetchUser } from "@/services/users/actions";
 import { ReactNode } from "react";
@@ -19,7 +20,16 @@ export default async function DashboardLayout({
 }) {
 
   const { data } = await fetchUser();
-  const { role, isLogged, full_name: fullName} = data;
+  const { role, isLogged, full_name: fullName, is_active: isActive, email } = data;
+
+  // Cuenta sin verificar (o desactivada): bloquea el dashboard hasta activarla
+  if (isLogged && !isActive) {
+    return (
+      <div className="flex w-full grow items-center justify-center bg-white px-6 py-16">
+        <AccountInactiveNotice email={email} />
+      </div>
+    );
+  }
 
   return (
     <UserProvider role={role} isLogged={isLogged} fullName={fullName}>

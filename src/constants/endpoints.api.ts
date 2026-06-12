@@ -10,6 +10,7 @@ const HOST =
 export const apiEndpoints = {
   UPLOAD_VIDEO: `${HOST}/api/upload-video`,
   UPLOAD_IMAGE: `${HOST}/api/upload-image`,
+  SIGN_UPLOAD: `${HOST}/api/sign-upload`,
   COOKIE: `${HOST}/api/cookie`,
 };
 

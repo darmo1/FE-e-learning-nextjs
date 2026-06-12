@@ -1,6 +1,7 @@
 "use server";
 
 import { ENDPOINT } from "@/constants/endpoints";
+import { unstable_rethrow } from "next/navigation";
 import { requestHandler } from "../../../utils/request-handler";
 import { ActionResult, actionFailure, actionSuccess } from "../types";
 import {
@@ -42,6 +43,7 @@ export const createCheckoutSessionAction = async (
     );
   } catch (error) {
     console.error("Error creating checkout session:", error);
+    unstable_rethrow(error);
     return actionFailure(
       "No pudimos iniciar el pago. Inténtalo de nuevo en unos minutos.",
       error

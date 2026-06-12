@@ -8,9 +8,13 @@ export function middleware(req: NextRequest) {
     const accessToken = req.cookies.get("access_token");
 
     if (!accessToken) {
-      const loginUrl = new URL(ROUTES.AUTH, req.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
+      // El access token expira antes que el refresh token: si todavía hay
+      // refresh, renueva la sesión en vez de obligar a iniciar sesión de nuevo
+      const refreshToken = req.cookies.get("refresh_token");
+      const target = refreshToken ? "/auth/refresh" : ROUTES.AUTH;
+      const redirectUrl = new URL(target, req.url);
+      redirectUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(redirectUrl);
     }
   }
 

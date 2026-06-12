@@ -1,16 +1,24 @@
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 100KB
-const VALID_VIDEO_TYPES = ["video/mp4"];
+const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
+// La UI promete MP4, MOV y AVI: el schema debe aceptar los mismos formatos
+const VALID_VIDEO_TYPES = [
+  "video/mp4",
+  "video/quicktime", // .mov
+  "video/x-msvideo", // .avi
+  "video/webm",
+];
+const INVALID_TYPE_MESSAGE = "El archivo debe ser un video (MP4, MOV, AVI o WebM)";
+const TOO_LARGE_MESSAGE = "El archivo es demasiado grande. El tamaño máximo es 2GB";
 
 // --- Validación compartida para archivos de video ---
 const baseVideoValidation = z
   .instanceof(File, { message: "Debes subir un archivo de video" })
   .refine((file) => VALID_VIDEO_TYPES.includes(file.type), {
-    message: "El archivo debe ser un video (mp4)",
+    message: INVALID_TYPE_MESSAGE,
   })
   .refine((file) => file.size <= MAX_FILE_SIZE, {
-    message: `El archivo es demasiado grande. El tamaño máximo es ${MAX_FILE_SIZE / 1000}KB`,
+    message: TOO_LARGE_MESSAGE,
   });
 
 // --- Validación flexible para edición (opcional) ---
@@ -20,13 +28,13 @@ const optionalVideoValidation = z
     if (!file || !(file instanceof File)) return true;
     return VALID_VIDEO_TYPES.includes(file.type);
   }, {
-    message: "El archivo debe ser un video (mp4)",
+    message: INVALID_TYPE_MESSAGE,
   })
   .refine((file) => {
     if (!file || !(file instanceof File)) return true;
     return file.size <= MAX_FILE_SIZE;
   }, {
-    message: `El archivo es demasiado grande. El tamaño máximo es ${MAX_FILE_SIZE / 1000}KB`,
+    message: TOO_LARGE_MESSAGE,
   });
 
 // --- Schemas ---
